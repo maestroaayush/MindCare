@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import './Home.css';
 
 export default function Home() {
   const [services, setServices] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
     setTimeout(() => {
@@ -45,6 +47,18 @@ export default function Home() {
     }, 500);
   }, []);
 
+  // Scroll to services if URL has #services
+  useEffect(() => {
+    if (location.hash === '#services') {
+      const section = document.getElementById('services-section');
+      if (section) {
+        setTimeout(() => {
+          section.scrollIntoView({ behavior: 'smooth' });
+        }, 100); // wait for render
+      }
+    }
+  }, [location]);
+
   return (
     <div className="home">
       <section className="hero">
@@ -64,7 +78,7 @@ export default function Home() {
 
       <hr className="section-separator" />
 
-      <section className="services">
+      <section className="services" id="services-section">
         <h3>Our Services</h3>
         <div className="service-list">
           {services.length === 0 ? (

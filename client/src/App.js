@@ -1,11 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Home from './pages/Home';
+import Home from './pages/Home/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import About from './pages/About Us/About';
-import Services from './pages/Services';
 import Contact from './pages/Contact';
 import DashboardLayout from './components/DashboardLayout';
 import DashboardHome from './pages/dashboard/DashboardHome';
@@ -24,7 +23,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/about" element={<About />} />
-<Route path="/services" element={<Services />} />
 <Route path="/contact" element={<Contact />} />
 
         {/* Dashboard Layout with Nested Routes */}
