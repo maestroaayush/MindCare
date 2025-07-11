@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-// import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
-import './Login/Login.css';
+import './Login.css';
 
-
-export default function Register() {
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+export default function Login() {
+  const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -22,10 +19,10 @@ export default function Register() {
     // Simulate API call
     setTimeout(() => {
       setLoading(false);
-      if (form.email && form.password && form.name) {
-        alert('Registration successful!');
+      if (form.email === 'user@example.com' && form.password === 'password') {
+        alert('Login successful!');
       } else {
-        setError('Please fill all fields');
+        setError('Invalid email or password');
       }
     }, 1200);
   };
@@ -34,24 +31,11 @@ export default function Register() {
     <div className="login-bg">
       <div className="login-container">
         <div className="login-illustration">
-          <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f465.png" alt="Register" />
+          <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f512.png" alt="Login" />
         </div>
         <form className="login-form" onSubmit={handleSubmit}>
-          <h2>Register</h2>
-          <p className="login-subtitle">Create your MindCare account</p>
-          <div className="login-field">
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              autoComplete="name"
-              placeholder="Your name"
-              value={form.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          <h2>Sign In</h2>
+          <p className="login-subtitle">Welcome back! Please login to your account.</p>
           <div className="login-field">
             <label htmlFor="email">Email</label>
             <input
@@ -72,8 +56,8 @@ export default function Register() {
                 type={showPassword ? 'text' : 'password'}
                 name="password"
                 id="password"
-                autoComplete="new-password"
-                placeholder="Create a password"
+                autoComplete="current-password"
+                placeholder="Your password"
                 value={form.password}
                 onChange={handleChange}
                 required
@@ -91,10 +75,12 @@ export default function Register() {
           </div>
           {error && <div className="login-error">{error}</div>}
           <button className="login-btn" type="submit" disabled={loading}>
-            {loading ? 'Registering...' : 'Register'}
+            {loading ? 'Signing in...' : 'Login'}
           </button>
           <div className="login-links">
-            <a href="/login">Back to Login</a>
+            <a href="/forgot-password">Forgot password?</a>
+            <span> | </span>
+            <a href="/register">Create account</a>
           </div>
         </form>
       </div>
