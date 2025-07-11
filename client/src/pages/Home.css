@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: #f4f6f8;
+background: linear-gradient(135deg, #b0b3b8 0%, #d1d3d6 100%) !important;
 }
 
 .home {
@@ -38,7 +38,7 @@ body {
 
 .hero {
   padding: 80px 20px;
-  background: white;
+    background: linear-gradient(135deg, #b0b3b8 0%, #d1d3d6 100%) !important;
 }
 
 .hero h2 {
@@ -61,7 +61,7 @@ body {
   text-decoration: none;
   border-radius: 6px;
   font-weight: bold;
-  transition: background 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .cta-button:hover {
@@ -69,13 +69,13 @@ body {
 }
 
 .hero-img {
+  display: block;
+  margin: 0 auto 20px auto;
   max-width: 400px;
   height: auto;
-  margin-bottom: 20px;
 }
-
 .services {
-  background: #f0f4f8;
+  background: linear-gradient(135deg, #b0b3b8 0%, #d1d3d6 100%) !important;;
   padding: 60px 20px;
 }
 
@@ -88,8 +88,11 @@ body {
 .service-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: center;   /* Center items horizontally */
+  align-items: stretch;
   gap: 2rem;
+  padding: 0;
+  margin: 0 auto;
 }
 
 .service-item {
@@ -97,11 +100,16 @@ body {
   padding: 20px;
   max-width: 280px;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+}
+.service-item:hover {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 8px 32px rgba(76, 42, 140, 0.12);
 }
 
 .testimonials {
-  background: #fff;
+  background: linear-gradient(135deg, #b0b3b8 0%, #d1d3d6 100%) !important;
   padding: 60px 20px;
   text-align: center;
 }
@@ -125,4 +133,32 @@ body {
   padding: 20px 30px;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.testimonial-service-item {
+  background: #fff;
+  border: 2px solid #f0f4f8;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 180px;
+   margin: 0 auto;
+}
+
+@media (max-width: 700px) {
+  .service-list {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+.section-separator {
+  width: 100%;
+  max-width: full-width;
+  /* margin: 20px auto 20px auto; */
+  border: none;
+  border-top: solid #444950;
+  opacity: 1;
 }

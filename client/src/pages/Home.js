@@ -1,63 +1,104 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Home.css';
-import { Link } from 'react-router-dom';
 
 export default function Home() {
+  const [services, setServices] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setServices([
+        {
+          icon: '💬',
+          title: 'Online Counseling',
+          desc: 'Connect with certified counselors from the comfort of your home.'
+        },
+        {
+          icon: '📞',
+          title: 'Telepsychiatry',
+          desc: 'Access psychiatric consultations via secure video calls.'
+        },
+        {
+          icon: '📚',
+          title: 'Mental Health Resources',
+          desc: 'Explore articles, guides, and self-help tools curated by experts.'
+        }
+      ]);
+      setTestimonials([
+        {
+          name: 'Aisha K.',
+          text: 'MindCare made it easy to get help when I needed it most. The counselors are caring and professional.'
+        },
+        {
+          name: 'Rahul S.',
+          text: 'The telepsychiatry service was a lifesaver during lockdown. Highly recommend!'
+        },
+        {
+          name: 'Fatima Z.',
+          text: 'The resources helped me understand and manage my anxiety better.'
+        },
+        {
+          name: 'Samuel O.',
+          text: 'Quick, private, and supportive. MindCare is a blessing!'
+        }
+      ]);
+    }, 500);
+  }, []);
+
   return (
     <div className="home">
-      <header className="navbar">
-        <h1 className="logo">MindCare</h1>
-        <nav>
-          <ul className="nav-links">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/about">About</Link></li>
-            <li><Link to="/services">Services</Link></li>
-            <li><Link to="/contact">Contact</Link></li>
-            <li><Link to="/login">Login</Link></li>
-          </ul>
-        </nav>
-      </header>
-
       <section className="hero">
-  <img src="/assets/hero.png" alt="Mental health support" className="hero-img" />
-  <h2>Welcome to MindCare</h2>
-  <p>Your digital gateway to accessible, compassionate mental health support.</p>
-  <Link to="/register" className="cta-button">Get Started</Link>
-</section>
+        <img
+          src="assets/hero.png"
+          alt="MindCare Heart"
+          className="hero-img"
+        />
+        <h2>Welcome to MindCare</h2>
+        <p>
+          Your digital bridge to accessible, compassionate mental health support.
+        </p>
+        <a href="/resources" className="cta-button">
+          Explore Resources
+        </a>
+      </section>
 
-<section className="services">
-  <h3>Our Services</h3>
-  <div className="service-list">
-    <div className="service-item">
-      <h4>Telepsychiatry</h4>
-      <p>Connect with licensed psychiatrists via secure video sessions.</p>
-    </div>
-    <div className="service-item">
-      <h4>Online Counseling</h4>
-      <p>Book therapy sessions tailored to your needs and preferences.</p>
-    </div>
-    <div className="service-item">
-      <h4>Resource Hub</h4>
-      <p>Access mental health articles, self-care guides, and tools.</p>
-    </div>
-  </div>
-</section>
+      <hr className="section-separator" />
 
-<section className="testimonials">
-  <h3>What Our Users Say</h3>
-  <div className="testimonial-list">
-    <div className="testimonial-item">
-      <p>“MindCare helped me talk to a therapist when I needed it most. Truly life-changing.”</p>
-      <strong>— Aisha, Student</strong>
-    </div>
-    <div className="testimonial-item">
-      <p>“Easy to use and filled with helpful resources. Highly recommend.”</p>
-      <strong>— Rohan, Engineer</strong>
-    </div>
-  </div>
-</section>
+      <section className="services">
+        <h3>Our Services</h3>
+        <div className="service-list">
+          {services.length === 0 ? (
+            <p>Loading services...</p>
+          ) : (
+            services.map((service, idx) => (
+              <div className="service-item" key={idx}>
+                <div style={{ fontSize: '2.2rem', marginBottom: '12px' }}>{service.icon}</div>
+                <h4>{service.title}</h4>
+                <p>{service.desc}</p>
+              </div>
+            ))
+          )}
+        </div>
+      </section>
 
+      <hr className="section-separator" />
 
+      <section className="testimonials">
+        <h3>What Our Users Say</h3>
+        <div className="service-list">
+          {testimonials.length === 0 ? (
+            <p>Loading testimonials...</p>
+          ) : (
+            testimonials.map((t, idx) => (
+              <div className="service-item testimonial-service-item" key={idx}>
+                <div style={{ fontSize: '2rem', marginBottom: '10px' }}>🗣️</div>
+                <p style={{ fontStyle: 'italic', marginBottom: '10px' }}>"{t.text}"</p>
+                <span style={{ fontWeight: 600, color: '#6a1b9a' }}>— {t.name}</span>
+              </div>
+            ))
+          )}
+        </div>
+      </section>
     </div>
   );
 }

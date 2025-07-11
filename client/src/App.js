@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import About from './pages/About';
+import About from './pages/About Us/About';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
 import DashboardLayout from './components/DashboardLayout';
@@ -12,10 +12,12 @@ import DashboardHome from './pages/dashboard/DashboardHome';
 import Profile from './pages/dashboard/Profile';
 import Sessions from './pages/dashboard/Sessions';
 import Resources from './pages/dashboard/Resources';
+import Navbar from './components/Navbar/Navbar';
 
 function App() {
   return (
     <BrowserRouter>
+    <Navbar/>
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
