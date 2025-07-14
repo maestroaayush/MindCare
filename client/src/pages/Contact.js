@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Contact.css';
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
@@ -11,7 +12,7 @@ export default function Contact() {
     setSuccess('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!form.name || !form.email || !form.message) {
@@ -19,118 +20,134 @@ export default function Contact() {
       return;
     }
 
-    // In real app, send to backend or email service
-    console.log('Form submitted:', form);
-    setSuccess('Message sent successfully!');
-    setForm({ name: '', email: '', message: '' });
+    try {
+      const response = await fetch('/api/contact/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (response.ok) {
+        setSuccess('Message sent successfully! We will get back to you soon.');
+        setForm({ name: '', email: '', message: '' });
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      setError('Network error. Please check your connection and try again.');
+    }
   };
 
   return (
-    <div style={styles.page}>
-      <h2 style={styles.title}>Contact Us</h2>
-      <p style={styles.subtitle}>We'd love to hear from you. Reach out anytime.</p>
-
-      <div style={styles.container}>
-        <div style={styles.info}>
-          <p><strong>Email:</strong> support@mindcare.com</p>
-          <p><strong>Phone:</strong> +60 123-456-789</p>
-          <p><strong>Location:</strong> Kuala Lumpur, Malaysia</p>
+    <div className="contact-page">
+      <div className="contact-container">
+        <div className="contact-header">
+          <h1 className="contact-title">Contact Us</h1>
+          <p className="contact-subtitle">
+            We'd love to hear from you. Reach out anytime for support, questions, or feedback.
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} style={styles.form}>
-          {success && <p style={styles.success}>{success}</p>}
-          {error && <p style={styles.error}>{error}</p>}
+        <div className="contact-content">
+          {/* Contact Information */}
+          <div className="contact-info">
+            <h2 className="contact-info-title">Get in Touch</h2>
+            
+            <div className="contact-info-item">
+              <div className="contact-info-icon">📧</div>
+              <div className="contact-info-content">
+                <h4>Email</h4>
+                <p>support@mindcare.com</p>
+              </div>
+            </div>
 
-          <input
-            type="text"
-            name="name"
-            placeholder="Your Name"
-            value={form.name}
-            onChange={handleChange}
-            style={styles.input}
-          />
+            <div className="contact-info-item">
+              <div className="contact-info-icon">📞</div>
+              <div className="contact-info-content">
+                <h4>Phone</h4>
+                <p>+60 123-456-789</p>
+              </div>
+            </div>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            value={form.email}
-            onChange={handleChange}
-            style={styles.input}
-          />
+            <div className="contact-info-item">
+              <div className="contact-info-icon">📍</div>
+              <div className="contact-info-content">
+                <h4>Location</h4>
+                <p>Kuala Lumpur, Malaysia</p>
+              </div>
+            </div>
 
-          <textarea
-            name="message"
-            placeholder="Your Message"
-            value={form.message}
-            onChange={handleChange}
-            rows="5"
-            style={{ ...styles.input, resize: 'vertical' }}
-          />
+            <div className="contact-info-item">
+              <div className="contact-info-icon">🕒</div>
+              <div className="contact-info-content">
+                <h4>Business Hours</h4>
+                <p>Mon - Fri: 9:00 AM - 6:00 PM</p>
+              </div>
+            </div>
+          </div>
 
-          <button type="submit" style={styles.button}>Send Message</button>
-        </form>
+          {/* Contact Form */}
+          <div className="contact-form-container">
+            <h2 className="contact-form-title">Send us a Message</h2>
+            
+            <form onSubmit={handleSubmit} className="contact-form">
+              {success && <div className="success-message">{success}</div>}
+              {error && <div className="error-message">{error}</div>}
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="name">Full Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="Enter your full name"
+                  value={form.name}
+                  onChange={handleChange}
+                  className="form-input"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="email">Email Address</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Enter your email address"
+                  value={form.email}
+                  onChange={handleChange}
+                  className="form-input"
+                  required
+                />
+              </div>
+
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="message">Message</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  placeholder="Tell us how we can help you..."
+                  value={form.message}
+                  onChange={handleChange}
+                  className="form-textarea"
+                  rows="5"
+                  required
+                />
+              </div>
+
+              <button type="submit" className="form-button">
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
-const styles = {
-  page: {
-    background: '#f9f9f9',
-    padding: '60px 20px',
-    minHeight: '100vh',
-    textAlign: 'center'
-  },
-  title: {
-    fontSize: '2.2rem',
-    color: '#6a1b9a',
-    marginBottom: '10px'
-  },
-  subtitle: {
-    fontSize: '1.1rem',
-    color: '#555',
-    marginBottom: '40px'
-  },
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: '40px'
-  },
-  info: {
-    flex: '1 1 250px',
-    textAlign: 'left',
-    fontSize: '1.1rem',
-    color: '#333'
-  },
-  form: {
-    flex: '1 1 300px',
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  input: {
-    padding: '12px',
-    marginBottom: '15px',
-    border: '1px solid #ccc',
-    borderRadius: '6px',
-    fontSize: '1rem'
-  },
-  button: {
-    padding: '12px',
-    backgroundColor: '#6a1b9a',
-    color: 'white',
-    border: 'none',
-    fontWeight: 'bold',
-    borderRadius: '6px',
-    cursor: 'pointer'
-  },
-  success: {
-    color: 'green',
-    marginBottom: '10px'
-  },
-  error: {
-    color: 'red',
-    marginBottom: '10px'
-  }
-};

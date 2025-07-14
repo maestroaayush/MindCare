@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
 const User = require('../models/User');
+const ContactMessage = require('../models/ContactMessage');
 
 // Middleware to check if user is admin
 const isAdmin = async (req, res, next) => {
@@ -79,6 +80,58 @@ router.delete('/users/:id', auth, isAdmin, async (req, res) => {
   }
 });
 
+// Get all contact messages
+router.get('/contact-messages', auth, isAdmin, async (req, res) => {
+  try {
+    const messages = await ContactMessage.find({}).sort({ createdAt: -1 });
+    res.json(messages);
+  } catch (err) {
+    res.status(500).json(err.message);
+  }
+});
+
+// Update contact message status
+router.put('/contact-messages/:id/status', auth, isAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    
+    if (!['new', 'in-progress', 'resolved'].includes(status)) {
+      return res.status(400).json('Invalid status');
+    }
+    
+    const message = await ContactMessage.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+    
+    if (!message) {
+      return res.status(404).json('Contact message not found');
+    }
+    
+    res.json(message);
+  } catch (err) {
+    res.status(500).json(err.message);
+  }
+});
+
+// Delete contact message
+router.delete('/contact-messages/:id', auth, isAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const message = await ContactMessage.findByIdAndDelete(id);
+    
+    if (!message) {
+      return res.status(404).json('Contact message not found');
+    }
+    
+    res.json('Contact message deleted successfully');
+  } catch (err) {
+    res.status(500).json(err.message);
+  }
+});
+
 // Get admin dashboard stats
 router.get('/stats', auth, isAdmin, async (req, res) => {
   try {
@@ -88,6 +141,10 @@ router.get('/stats', auth, isAdmin, async (req, res) => {
     const rejectedUsers = await User.countDocuments({ approvalStatus: 'rejected' });
     const patients = await User.countDocuments({ role: 'patient' });
     const psychiatrists = await User.countDocuments({ role: 'psychiatrist' });
+    const totalMessages = await ContactMessage.countDocuments({});
+    const newMessages = await ContactMessage.countDocuments({ status: 'new' });
+    const inProgressMessages = await ContactMessage.countDocuments({ status: 'in-progress' });
+    const resolvedMessages = await ContactMessage.countDocuments({ status: 'resolved' });
     
     res.json({
       totalUsers,
@@ -95,7 +152,11 @@ router.get('/stats', auth, isAdmin, async (req, res) => {
       approvedUsers,
       rejectedUsers,
       patients,
-      psychiatrists
+      psychiatrists,
+      totalMessages,
+      newMessages,
+      inProgressMessages,
+      resolvedMessages
     });
   } catch (err) {
     res.status(500).json(err.message);
