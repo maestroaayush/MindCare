@@ -1,0 +1,546 @@
+/* Enhanced Psychiatrist Dashboard CSS */
+
+/* Main container */
+.psychiatrist-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 30px;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Loading state */
+.psychiatrist-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.psychiatrist-loading h2 {
+  color: white;
+  font-size: 1.8rem;
+  text-align: center;
+  margin: 0;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* Header section */
+.psychiatrist-header {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: slideDown 0.6s ease-out;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.psychiatrist-title {
+  font-size: 2.5rem;
+  color: white;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.psychiatrist-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.2rem;
+  margin-bottom: 0;
+  font-weight: 300;
+}
+
+/* Cards grid */
+.psychiatrist-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Individual card styling */
+.psychiatrist-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  animation: slideUp 0.8s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.psychiatrist-card:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transition: height 0.3s ease;
+}
+
+.psychiatrist-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.psychiatrist-card:hover:before {
+  height: 6px;
+}
+
+.psychiatrist-card-title {
+  font-size: 1.4rem;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  margin-top: 0;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.psychiatrist-card-title:before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: #667eea;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.psychiatrist-card-text {
+  color: #5a6c7d;
+  margin-bottom: 20px;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* Sessions list */
+.psychiatrist-sessions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.psychiatrist-session-item {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  padding: 16px;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.psychiatrist-session-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.psychiatrist-session-date {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.9rem;
+}
+
+.psychiatrist-session-time {
+  color: #667eea;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.psychiatrist-session-patient {
+  color: #27ae60;
+  font-weight: 500;
+  font-size: 0.85rem;
+  background: rgba(39, 174, 96, 0.1);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+/* Resource stats */
+.psychiatrist-resource-stats {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.psychiatrist-stat-item {
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 15px;
+  color: white;
+  min-width: 120px;
+}
+
+.psychiatrist-stat-number {
+  font-size: 3rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 8px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.psychiatrist-stat-label {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Buttons */
+.psychiatrist-primary-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  text-decoration: none;
+  display: inline-block;
+  font-family: inherit;
+  min-width: 140px;
+  text-align: center;
+}
+
+.psychiatrist-primary-button:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.psychiatrist-primary-button:hover:before {
+  left: 100%;
+}
+
+.psychiatrist-primary-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5);
+  background: linear-gradient(135deg, #5a6fd8 0%, #6b4190 50%, #5a6fd8 100%);
+}
+
+.psychiatrist-primary-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.psychiatrist-primary-button:focus {
+  outline: 3px solid rgba(102, 126, 234, 0.5);
+  outline-offset: 3px;
+}
+
+/* Quick actions */
+.psychiatrist-quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+}
+
+.psychiatrist-action-button {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  color: #2c3e50;
+  border: 2px solid #667eea;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+  text-decoration: none;
+  display: inline-block;
+  font-family: inherit;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.psychiatrist-action-button:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+.psychiatrist-action-button:hover:before {
+  width: 100%;
+}
+
+.psychiatrist-action-button:hover {
+  color: white;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+  border-color: #5a6fd8;
+}
+
+.psychiatrist-action-button:active {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.psychiatrist-action-button:focus {
+  outline: 3px solid rgba(102, 126, 234, 0.5);
+  outline-offset: 3px;
+}
+
+.psychiatrist-action-button span {
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .psychiatrist-container {
+    padding: 20px;
+  }
+  
+  .psychiatrist-title {
+    font-size: 2rem;
+  }
+  
+  .psychiatrist-subtitle {
+    font-size: 1rem;
+  }
+  
+  .psychiatrist-cards {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .psychiatrist-card {
+    padding: 20px;
+  }
+  
+  .psychiatrist-session-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .psychiatrist-quick-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .psychiatrist-container {
+    padding: 15px;
+  }
+  
+  .psychiatrist-title {
+    font-size: 1.8rem;
+  }
+  
+  .psychiatrist-card {
+    padding: 15px;
+  }
+  
+  .psychiatrist-stat-number {
+    font-size: 2.5rem;
+  }
+}
+
+/* Additional button variants for different use cases */
+.psychiatrist-secondary-button {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  color: #667eea;
+  border: 2px solid #667eea;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+  text-decoration: none;
+  display: inline-block;
+  font-family: inherit;
+  min-width: 120px;
+  text-align: center;
+}
+
+.psychiatrist-secondary-button:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.psychiatrist-secondary-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+}
+
+.psychiatrist-secondary-button:focus {
+  outline: 3px solid rgba(102, 126, 234, 0.5);
+  outline-offset: 3px;
+}
+
+/* Danger button for critical actions */
+.psychiatrist-danger-button {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+  text-decoration: none;
+  display: inline-block;
+  font-family: inherit;
+  min-width: 120px;
+  text-align: center;
+}
+
+.psychiatrist-danger-button:hover {
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+}
+
+.psychiatrist-danger-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.psychiatrist-danger-button:focus {
+  outline: 3px solid rgba(231, 76, 60, 0.5);
+  outline-offset: 3px;
+}
+
+/* Button group styling */
+.psychiatrist-button-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.psychiatrist-button-group .psychiatrist-primary-button,
+.psychiatrist-button-group .psychiatrist-secondary-button,
+.psychiatrist-button-group .psychiatrist-danger-button {
+  margin: 0;
+}
+
+/* Accessibility improvements */
+.psychiatrist-primary-button:focus-visible,
+.psychiatrist-action-button:focus-visible,
+.psychiatrist-secondary-button:focus-visible,
+.psychiatrist-danger-button:focus-visible {
+  outline: 3px solid rgba(102, 126, 234, 0.7);
+  outline-offset: 3px;
+}
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .psychiatrist-primary-button,
+  .psychiatrist-action-button,
+  .psychiatrist-secondary-button,
+  .psychiatrist-danger-button {
+    transition: none;
+  }
+  
+  .psychiatrist-primary-button:hover,
+  .psychiatrist-action-button:hover,
+  .psychiatrist-secondary-button:hover,
+  .psychiatrist-danger-button:hover {
+    transform: none;
+  }
+}
+
+/* Loading spinner animation */
+.psychiatrist-spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 15px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Smooth scrolling for the container */
+.psychiatrist-container {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced hover effects for cards */
+.psychiatrist-card:hover .psychiatrist-card-title {
+  color: #667eea;
+}
+
+.psychiatrist-card:hover .psychiatrist-card-title:before {
+  background: #764ba2;
+  transform: scale(1.2);
+}

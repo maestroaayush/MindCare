@@ -110,7 +110,7 @@ export default function Home() {
               <a href="/resources" className="cta-button primary">
                 Explore Resources
               </a>
-              <a href="#services" className="cta-button secondary">
+              <a href="/learn-more" className="cta-button secondary">
                 Learn More
               </a>
             </div>
