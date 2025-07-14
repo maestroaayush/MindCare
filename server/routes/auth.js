@@ -27,8 +27,26 @@ router.post('/login', async (req, res) => {
     if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
       return res.status(401).json("Invalid credentials");
     }
+    
+    // Check approval status
+    if (user.approvalStatus === 'pending') {
+      return res.status(403).json("Your account is pending admin approval. Please wait for approval before logging in.");
+    }
+    
+    if (user.approvalStatus === 'rejected') {
+      return res.status(403).json("Your account has been rejected. Please contact support for more information.");
+    }
+    
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET);
-    res.json({ token, user: { name: user.name, role: user.role } });
+    res.json({ 
+      token, 
+      user: { 
+        id: user._id,
+        name: user.name, 
+        role: user.role,
+        approvalStatus: user.approvalStatus
+      } 
+    });
   } catch (err) {
     res.status(500).json(err.message);
   }

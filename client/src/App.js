@@ -10,7 +10,9 @@ import DashboardHome from './pages/dashboard/DashboardHome';
 import Profile from './pages/dashboard/Profile';
 import Sessions from './pages/dashboard/Sessions';
 import Resources from './pages/dashboard/Resources';
+import AdminPanel from './components/Admin/AdminPanel';
 import Navbar from './components/Navbar/Navbar';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   return (
@@ -25,12 +27,15 @@ function App() {
 <Route path="/contact" element={<Contact />} />
 
         {/* Dashboard Layout with Nested Routes */}
-        <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route path="/dashboard" element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
           <Route index element={<DashboardHome />} />
           <Route path="profile" element={<Profile />} />
           <Route path="sessions" element={<Sessions />} />
           <Route path="resources" element={<Resources />} />
         </Route>
+
+        {/* Admin Panel Route */}
+        <Route path="/admin" element={<PrivateRoute requiredRole="admin"><AdminPanel /></PrivateRoute>} />
       </Routes>
     </BrowserRouter>
   );

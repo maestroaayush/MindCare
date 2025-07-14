@@ -1,31 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import {
+  loginUser,
+  clearError,
+  selectIsAuthenticated,
+  selectAuthLoading,
+  selectAuthError
+} from '../../store/slices/authSlice';
 import './Login.css';
 
 export default function Login() {
-  const [form, setForm] = useState({ email: '', password: '' });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const isLoading = useAppSelector(selectAuthLoading);
+  const error = useAppSelector(selectAuthError);
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setError('');
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    // Clear any existing errors when component mounts
+    dispatch(clearError());
+  }, [dispatch]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    
+    // Clear errors when user starts typing
+    if (error) {
+      dispatch(clearError());
+    }
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      if (form.email === 'user@example.com' && form.password === 'password') {
-        alert('Login successful!');
-      } else {
-        setError('Invalid email or password');
-      }
-    }, 1200);
+    
+    if (!formData.email || !formData.password) {
+      return;
+    }
+
+    try {
+      await dispatch(loginUser(formData)).unwrap();
+      // Navigation will be handled by useEffect when isAuthenticated changes
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   };
+
 
   return (
     <div className="login-bg">
@@ -35,7 +73,10 @@ export default function Login() {
         </div>
         <form className="login-form" onSubmit={handleSubmit}>
           <h2>Sign In</h2>
-          <p className="login-subtitle">Welcome back! Please login to your account.</p>
+          <p className="login-subtitle">Welcome back to MindCare!</p>
+          
+          {error && <div className="login-error">{error}</div>}
+          
           <div className="login-field">
             <label htmlFor="email">Email</label>
             <input
@@ -44,7 +85,7 @@ export default function Login() {
               id="email"
               autoComplete="username"
               placeholder="you@email.com"
-              value={form.email}
+              value={formData.email}
               onChange={handleChange}
               required
             />
@@ -58,7 +99,7 @@ export default function Login() {
                 id="password"
                 autoComplete="current-password"
                 placeholder="Your password"
-                value={form.password}
+                value={formData.password}
                 onChange={handleChange}
                 required
               />
@@ -73,14 +114,18 @@ export default function Login() {
               </button>
             </div>
           </div>
-          {error && <div className="login-error">{error}</div>}
-          <button className="login-btn" type="submit" disabled={loading}>
-            {loading ? 'Signing in...' : 'Login'}
+          
+          <button 
+            className="login-btn" 
+            type="submit" 
+            disabled={isLoading || !formData.email || !formData.password}
+          >
+            {isLoading ? 'Signing in...' : 'Login'}
           </button>
+          
+          
           <div className="login-links">
-            <a href="/forgot-password">Forgot password?</a>
-            <span> | </span>
-            <a href="/register">Create account</a>
+            <Link to="/register">Create account</Link>
           </div>
         </form>
       </div>

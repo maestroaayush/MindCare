@@ -1,9 +1,24 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../store/slices/authSlice';
 import './Navbar.css';
 
 export default function Navbar() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  // Get authentication state from Redux store
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+
+  const handleLogout = () => {
+    // Dispatch logout action which will clear Redux state and localStorage
+    dispatch(logout());
+    
+    // Redirect to home page
+    navigate('/');
+  };
 
   // Scroll to services section if on home, else navigate to home and scroll after navigation
   const handleServicesClick = (e) => {
@@ -32,7 +47,23 @@ export default function Navbar() {
           </Link>
         </li>
         <li><Link to="/contact">Contact</Link></li>
-        <li><Link to="/login">Login</Link></li>
+        {isAuthenticated ? (
+          <>
+            <li><Link to="/dashboard">Dashboard</Link></li>
+            <li>
+              <button 
+                onClick={handleLogout}
+                className="logout-btn"
+              >
+                Logout
+              </button>
+            </li>
+          </>
+        ) : (
+          <>
+            <li><Link to="/login">Login</Link></li>
+          </>
+        )}
       </ul>
     </nav>
   );
