@@ -20,17 +20,6 @@ export default function Navbar() {
     navigate('/');
   };
 
-  // Scroll to services section if on home, else navigate to home and scroll after navigation
-  const handleServicesClick = (e) => {
-    if (location.pathname === '/') {
-      e.preventDefault();
-      const section = document.getElementById('services-section');
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-    // If not on home, let Link navigate to home with hash, Home.js will handle scroll
-  };
 
   return (
     <nav className="navbar">
@@ -38,14 +27,7 @@ export default function Navbar() {
       <ul className="nav-links">
         <li><Link to="/">Home</Link></li>
         <li><Link to="/about">About</Link></li>
-        <li>
-          <Link
-            to={location.pathname === '/' ? '#' : '/#services'}
-            onClick={handleServicesClick}
-          >
-            Services
-          </Link>
-        </li>
+        <li><Link to="/services">Services</Link></li>
         <li><Link to="/contact">Contact</Link></li>
         {isAuthenticated ? (
           <>

@@ -8,6 +8,7 @@ import Contact from './pages/Contact';
 import ExploreResources from './pages/ExploreResources';
 import LearnMore from './pages/LearnMore';
 import DashboardLayout from './components/DashboardLayout';
+import Services from './pages/Services';
 import DashboardHome from './pages/dashboard/DashboardHome';
 import Profile from './pages/dashboard/Profile';
 import Sessions from './pages/dashboard/Sessions';
@@ -35,6 +36,7 @@ function App() {
         <ConditionalNavbar />
         <Routes>
           {/* Public Routes */}
+          <Route path="/services" element={<Services />} />
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

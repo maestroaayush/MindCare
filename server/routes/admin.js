@@ -7,7 +7,7 @@ const ContactMessage = require('../models/ContactMessage');
 // Middleware to check if user is admin
 const isAdmin = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findByPk(req.user.id);
     if (user.role !== 'admin') {
       return res.status(403).json('Access denied. Admin privileges required.');
     }
@@ -20,7 +20,10 @@ const isAdmin = async (req, res, next) => {
 // Get all users for admin panel
 router.get('/users', auth, isAdmin, async (req, res) => {
   try {
-    const users = await User.find({}).select('-password').sort({ createdAt: -1 });
+    const users = await User.findAll({
+      attributes: { exclude: ['password'] },
+      order: [['createdAt', 'DESC']]
+    });
     res.json(users);
   } catch (err) {
     res.status(500).json(err.message);
@@ -31,7 +34,11 @@ router.get('/users', auth, isAdmin, async (req, res) => {
 router.get('/users/:status', auth, isAdmin, async (req, res) => {
   try {
     const { status } = req.params;
-    const users = await User.find({ approvalStatus: status }).select('-password').sort({ createdAt: -1 });
+    const users = await User.findAll({
+      where: { approvalStatus: status },
+      attributes: { exclude: ['password'] },
+      order: [['createdAt', 'DESC']]
+    });
     res.json(users);
   } catch (err) {
     res.status(500).json(err.message);
@@ -48,11 +55,14 @@ router.put('/users/:id/approval', auth, isAdmin, async (req, res) => {
       return res.status(400).json('Invalid approval status');
     }
     
-    const user = await User.findByIdAndUpdate(
-      id,
+    await User.update(
       { approvalStatus },
-      { new: true }
-    ).select('-password');
+      { where: { id } }
+    );
+
+    const user = await User.findByPk(id, {
+      attributes: { exclude: ['password'] }
+    });
     
     if (!user) {
       return res.status(404).json('User not found');
@@ -68,9 +78,11 @@ router.put('/users/:id/approval', auth, isAdmin, async (req, res) => {
 router.delete('/users/:id', auth, isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findByIdAndDelete(id);
+    const deleted = await User.destroy({
+      where: { id }
+    });
     
-    if (!user) {
+    if (!deleted) {
       return res.status(404).json('User not found');
     }
     
@@ -83,7 +95,9 @@ router.delete('/users/:id', auth, isAdmin, async (req, res) => {
 // Get all contact messages
 router.get('/contact-messages', auth, isAdmin, async (req, res) => {
   try {
-    const messages = await ContactMessage.find({}).sort({ createdAt: -1 });
+    const messages = await ContactMessage.findAll({
+      order: [['createdAt', 'DESC']]
+    });
     res.json(messages);
   } catch (err) {
     res.status(500).json(err.message);
@@ -96,15 +110,16 @@ router.put('/contact-messages/:id/status', auth, isAdmin, async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
     
-    if (!['new', 'in-progress', 'resolved'].includes(status)) {
+    if (!['new', 'read', 'replied', 'archived'].includes(status)) {
       return res.status(400).json('Invalid status');
     }
     
-    const message = await ContactMessage.findByIdAndUpdate(
-      id,
+    await ContactMessage.update(
       { status },
-      { new: true }
+      { where: { id } }
     );
+
+    const message = await ContactMessage.findByPk(id);
     
     if (!message) {
       return res.status(404).json('Contact message not found');
@@ -120,9 +135,11 @@ router.put('/contact-messages/:id/status', auth, isAdmin, async (req, res) => {
 router.delete('/contact-messages/:id', auth, isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const message = await ContactMessage.findByIdAndDelete(id);
+    const deleted = await ContactMessage.destroy({
+      where: { id }
+    });
     
-    if (!message) {
+    if (!deleted) {
       return res.status(404).json('Contact message not found');
     }
     
@@ -135,16 +152,17 @@ router.delete('/contact-messages/:id', auth, isAdmin, async (req, res) => {
 // Get admin dashboard stats
 router.get('/stats', auth, isAdmin, async (req, res) => {
   try {
-    const totalUsers = await User.countDocuments({});
-    const pendingUsers = await User.countDocuments({ approvalStatus: 'pending' });
-    const approvedUsers = await User.countDocuments({ approvalStatus: 'approved' });
-    const rejectedUsers = await User.countDocuments({ approvalStatus: 'rejected' });
-    const patients = await User.countDocuments({ role: 'patient' });
-    const psychiatrists = await User.countDocuments({ role: 'psychiatrist' });
-    const totalMessages = await ContactMessage.countDocuments({});
-    const newMessages = await ContactMessage.countDocuments({ status: 'new' });
-    const inProgressMessages = await ContactMessage.countDocuments({ status: 'in-progress' });
-    const resolvedMessages = await ContactMessage.countDocuments({ status: 'resolved' });
+    const totalUsers = await User.count();
+    const pendingUsers = await User.count({ where: { approvalStatus: 'pending' } });
+    const approvedUsers = await User.count({ where: { approvalStatus: 'approved' } });
+    const rejectedUsers = await User.count({ where: { approvalStatus: 'rejected' } });
+    const patients = await User.count({ where: { role: 'patient' } });
+    const psychiatrists = await User.count({ where: { role: 'psychiatrist' } });
+    const totalMessages = await ContactMessage.count();
+    const newMessages = await ContactMessage.count({ where: { status: 'new' } });
+    const readMessages = await ContactMessage.count({ where: { status: 'read' } });
+    const repliedMessages = await ContactMessage.count({ where: { status: 'replied' } });
+    const archivedMessages = await ContactMessage.count({ where: { status: 'archived' } });
     
     res.json({
       totalUsers,
@@ -155,8 +173,9 @@ router.get('/stats', auth, isAdmin, async (req, res) => {
       psychiatrists,
       totalMessages,
       newMessages,
-      inProgressMessages,
-      resolvedMessages
+      readMessages,
+      repliedMessages,
+      archivedMessages
     });
   } catch (err) {
     res.status(500).json(err.message);
