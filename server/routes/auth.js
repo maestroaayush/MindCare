@@ -12,8 +12,7 @@ router.post('/register', async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
     const hashed = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, email, password: hashed, role });
-    await newUser.save();
+    const newUser = await User.create({ name, email, password: hashed, role });
     res.status(201).json("User registered");
   } catch (err) {
     res.status(400).json(err.message);
@@ -23,7 +22,7 @@ router.post('/register', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ where: { email: req.body.email } });
     if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
       return res.status(401).json("Invalid credentials");
     }
@@ -37,11 +36,11 @@ router.post('/login', async (req, res) => {
       return res.status(403).json("Your account has been rejected. Please contact support for more information.");
     }
     
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET);
     res.json({ 
       token, 
       user: { 
-        id: user._id,
+        id: user.id,
         name: user.name, 
         role: user.role,
         approvalStatus: user.approvalStatus
@@ -53,7 +52,9 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/me', auth, async (req, res) => {
-  const user = await User.findById(req.user.id).select('-password');
+  const user = await User.findByPk(req.user.id, {
+    attributes: { exclude: ['password'] }
+  });
   res.json(user);
 });
 
@@ -67,13 +68,16 @@ router.put('/update', auth, upload.single('profilePic'), async (req, res) => {
       updates.profilePic = `/uploads/${req.file.filename}`;
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      req.user.id,
-      { $set: updates },
-      { new: true }
-    ).select('-password');
+    const updatedUser = await User.update(updates, {
+      where: { id: req.user.id },
+      returning: true
+    });
 
-    res.json(updatedUser);
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ['password'] }
+    });
+
+    res.json(user);
   } catch (err) {
     console.error(err);
     res.status(500).json('Error updating profile');
