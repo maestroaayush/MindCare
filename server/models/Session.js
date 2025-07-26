@@ -1,44 +1,38 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+const User = require('./User');
 
-const sessionSchema = new mongoose.Schema({
-  patient: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  psychiatrist: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
+const Session = sequelize.define('Session', {
   date: {
-    type: Date,
-    required: true
+    type: DataTypes.DATE,
+    allowNull: false
   },
   time: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
   duration: {
-    type: Number,
-    default: 60 // minutes
+    type: DataTypes.INTEGER,
+    defaultValue: 60
   },
   status: {
-    type: String,
-    enum: ['scheduled', 'completed', 'cancelled'],
-    default: 'scheduled'
+    type: DataTypes.ENUM('scheduled', 'completed', 'cancelled'),
+    defaultValue: 'scheduled'
   },
   notes: {
-    type: String,
-    default: ''
+    type: DataTypes.TEXT,
+    defaultValue: ''
   },
   sessionType: {
-    type: String,
-    enum: ['individual', 'group', 'emergency'],
-    default: 'individual'
+    type: DataTypes.ENUM('individual', 'group', 'emergency'),
+    defaultValue: 'individual'
   }
 }, {
   timestamps: true
 });
 
-module.exports = mongoose.model('Session', sessionSchema);
+// Define associations
+Session.belongsTo(User, { as: 'patient', foreignKey: 'patientId' });
+Session.belongsTo(User, { as: 'psychiatrist', foreignKey: 'psychiatristId' });
+
+module.exports = Session;

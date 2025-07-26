@@ -1,57 +1,57 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+const User = require('./User');
 
-const resourceSchema = new mongoose.Schema({
+const Resource = sequelize.define('Resource', {
   title: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
   description: {
-    type: String,
-    required: true
+    type: DataTypes.TEXT,
+    allowNull: false
   },
   link: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
   type: {
-    type: String,
-    enum: ['article', 'video', 'tool', 'guide', 'podcast'],
-    required: true
+    type: DataTypes.ENUM('article', 'video', 'tool', 'guide', 'podcast'),
+    allowNull: false
   },
   category: {
-    type: String,
-    enum: ['anxiety', 'depression', 'stress', 'self-care', 'mindfulness', 'general'],
-    default: 'general'
+    type: DataTypes.ENUM('anxiety', 'depression', 'stress', 'self-care', 'mindfulness', 'general'),
+    defaultValue: 'general'
   },
-  author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+  tags: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    defaultValue: []
   },
-  tags: [String],
   difficulty: {
-    type: String,
-    enum: ['beginner', 'intermediate', 'advanced'],
-    default: 'beginner'
+    type: DataTypes.ENUM('beginner', 'intermediate', 'advanced'),
+    defaultValue: 'beginner'
   },
   duration: {
-    type: Number, // in minutes
-    default: 0
+    type: DataTypes.INTEGER,
+    defaultValue: 0
   },
   isPublished: {
-    type: Boolean,
-    default: true
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
   },
   likes: {
-    type: Number,
-    default: 0
+    type: DataTypes.INTEGER,
+    defaultValue: 0
   },
   views: {
-    type: Number,
-    default: 0
+    type: DataTypes.INTEGER,
+    defaultValue: 0
   }
 }, {
   timestamps: true
 });
 
-module.exports = mongoose.model('Resource', resourceSchema);
+// Define associations
+Resource.belongsTo(User, { as: 'author', foreignKey: 'authorId' });
+
+module.exports = Resource;

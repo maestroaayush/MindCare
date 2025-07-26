@@ -1,38 +1,78 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ['patient', 'psychiatrist', 'admin'], default: 'patient' },
-  approvalStatus: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
-  profilePic: { type: String },
-  
-  // Additional fields for psychiatrists
-  specialization: { type: String },
-  licenseNumber: { type: String },
-  experience: { type: Number }, // years
-  bio: { type: String },
-  
-  // Additional fields for patients
-  dateOfBirth: { type: Date },
-  phone: { type: String },
-  emergencyContact: {
-    name: { type: String },
-    phone: { type: String },
-    relationship: { type: String }
+const User = sequelize.define('User', {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
-  
-  // Common fields
-  isActive: { type: Boolean, default: true },
-  lastLogin: { type: Date },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true
+    }
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  role: {
+    type: DataTypes.ENUM('patient', 'psychiatrist', 'admin'),
+    defaultValue: 'patient'
+  },
+  approvalStatus: {
+    type: DataTypes.ENUM('pending', 'approved', 'rejected'),
+    defaultValue: 'pending'
+  },
+  profilePic: {
+    type: DataTypes.STRING
+  },
+  specialization: {
+    type: DataTypes.STRING
+  },
+  licenseNumber: {
+    type: DataTypes.STRING
+  },
+  experience: {
+    type: DataTypes.INTEGER
+  },
+  bio: {
+    type: DataTypes.TEXT
+  },
+  dateOfBirth: {
+    type: DataTypes.DATE
+  },
+  phone: {
+    type: DataTypes.STRING
+  },
+  emergencyContactName: {
+    type: DataTypes.STRING
+  },
+  emergencyContactPhone: {
+    type: DataTypes.STRING
+  },
+  emergencyContactRelation: {
+    type: DataTypes.STRING
+  },
+  isActive: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+  },
+  lastLogin: {
+    type: DataTypes.DATE
+  },
   preferences: {
-    notifications: { type: Boolean, default: true },
-    theme: { type: String, enum: ['light', 'dark'], default: 'light' },
-    language: { type: String, default: 'en' }
+    type: DataTypes.JSONB,
+    defaultValue: {
+      notifications: true,
+      theme: 'light',
+      language: 'en'
+    }
   }
 }, {
   timestamps: true
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = User;

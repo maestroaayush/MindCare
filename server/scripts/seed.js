@@ -1,28 +1,23 @@
-const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-const User = require('../models/User');
-const Resource = require('../models/Resource');
-const Session = require('../models/Session');
+const { sequelize, User, Resource, Session } = require('../models');
 
 const seedData = async () => {
   try {
-    // Connect to MongoDB
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log('Connected to MongoDB');
-
-    // Clear existing data
-    await User.deleteMany({});
-    await Resource.deleteMany({});
-    await Session.deleteMany({});
-    console.log('Cleared existing data');
+    // Connect to PostgreSQL
+    await sequelize.authenticate();
+    console.log('Connected to PostgreSQL');
+    
+    // Sync all models with the database
+    await sequelize.sync({ force: true });
+    console.log('Database schema created');
 
     // Create sample users
     const hashedPassword = await bcrypt.hash('password123', 10);
 
     // Create psychiatrists
-    const psychiatrists = await User.create([
+    const psychiatrists = await User.bulkCreate([
       {
         name: 'Dr. Maya Singh',
         email: 'maya.singh@mindcare.com',
@@ -62,7 +57,7 @@ const seedData = async () => {
     ]);
 
     // Create sample patients
-    const patients = await User.create([
+    const patients = await User.bulkCreate([
       {
         name: 'John Doe',
         email: 'john.doe@email.com',
@@ -110,14 +105,14 @@ const seedData = async () => {
     console.log('Created sample users');
 
     // Create sample resources
-    const resources = await Resource.create([
+    const resources = await Resource.bulkCreate([
       {
         title: 'Managing Anxiety: A Comprehensive Guide',
         description: 'Learn effective techniques to manage anxiety symptoms and improve your daily life.',
         link: 'https://example.com/anxiety-guide',
         type: 'guide',
         category: 'anxiety',
-        author: psychiatrists[0]._id,
+        authorId: psychiatrists[0].id,
         tags: ['anxiety', 'coping', 'mindfulness'],
         difficulty: 'beginner',
         duration: 30,
@@ -130,7 +125,7 @@ const seedData = async () => {
         link: 'https://example.com/meditation-video',
         type: 'video',
         category: 'mindfulness',
-        author: psychiatrists[1]._id,
+        authorId: psychiatrists[1].id,
         tags: ['mindfulness', 'meditation', 'relaxation'],
         difficulty: 'beginner',
         duration: 10,
@@ -143,7 +138,7 @@ const seedData = async () => {
         link: 'https://example.com/depression-article',
         type: 'article',
         category: 'depression',
-        author: psychiatrists[1]._id,
+        authorId: psychiatrists[1].id,
         tags: ['depression', 'coping', 'self-care'],
         difficulty: 'intermediate',
         duration: 15,
@@ -156,7 +151,7 @@ const seedData = async () => {
         link: 'https://example.com/self-care-tool',
         type: 'tool',
         category: 'self-care',
-        author: psychiatrists[2]._id,
+        authorId: psychiatrists[2].id,
         tags: ['self-care', 'routine', 'wellness'],
         difficulty: 'beginner',
         duration: 20,
@@ -169,7 +164,7 @@ const seedData = async () => {
         link: 'https://example.com/trauma-podcast',
         type: 'podcast',
         category: 'general',
-        author: psychiatrists[2]._id,
+        authorId: psychiatrists[2].id,
         tags: ['trauma', 'healing', 'recovery'],
         difficulty: 'intermediate',
         duration: 45,
@@ -182,7 +177,7 @@ const seedData = async () => {
         link: 'https://example.com/stress-guide',
         type: 'guide',
         category: 'stress',
-        author: psychiatrists[0]._id,
+        authorId: psychiatrists[0].id,
         tags: ['stress', 'management', 'techniques'],
         difficulty: 'beginner',
         duration: 25,
@@ -202,10 +197,10 @@ const seedData = async () => {
     const futureDate3 = new Date(currentDate);
     futureDate3.setDate(currentDate.getDate() + 21);
 
-    const sessions = await Session.create([
+    const sessions = await Session.bulkCreate([
       {
-        patient: patients[0]._id,
-        psychiatrist: psychiatrists[0]._id,
+        patientId: patients[0].id,
+        psychiatristId: psychiatrists[0].id,
         date: futureDate1,
         time: '10:00 AM',
         duration: 60,
@@ -214,8 +209,8 @@ const seedData = async () => {
         notes: 'Initial consultation for anxiety management'
       },
       {
-        patient: patients[0]._id,
-        psychiatrist: psychiatrists[0]._id,
+        patientId: patients[0].id,
+        psychiatristId: psychiatrists[0].id,
         date: futureDate2,
         time: '10:00 AM',
         duration: 60,
@@ -224,8 +219,8 @@ const seedData = async () => {
         notes: 'Follow-up session'
       },
       {
-        patient: patients[1]._id,
-        psychiatrist: psychiatrists[1]._id,
+        patientId: patients[1].id,
+        psychiatristId: psychiatrists[1].id,
         date: futureDate1,
         time: '2:00 PM',
         duration: 60,
@@ -234,8 +229,8 @@ const seedData = async () => {
         notes: 'Depression therapy session'
       },
       {
-        patient: patients[2]._id,
-        psychiatrist: psychiatrists[2]._id,
+        patientId: patients[2].id,
+        psychiatristId: psychiatrists[2].id,
         date: futureDate3,
         time: '11:00 AM',
         duration: 90,
@@ -244,8 +239,8 @@ const seedData = async () => {
         notes: 'Trauma therapy session'
       },
       {
-        patient: patients[1]._id,
-        psychiatrist: psychiatrists[1]._id,
+        patientId: patients[1].id,
+        psychiatristId: psychiatrists[1].id,
         date: new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
         time: '2:00 PM',
         duration: 60,
@@ -266,7 +261,7 @@ const seedData = async () => {
   } catch (error) {
     console.error('Error seeding database:', error);
   } finally {
-    await mongoose.connection.close();
+    await sequelize.close();
     console.log('Database connection closed');
   }
 };

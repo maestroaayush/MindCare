@@ -1,32 +1,32 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const contactMessageSchema = new mongoose.Schema({
+const ContactMessage = sequelize.define('ContactMessage', {
   name: {
-    type: String,
-    required: true,
-    trim: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
   email: {
-    type: String,
-    required: true,
-    trim: true
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      isEmail: true
+    }
   },
   message: {
-    type: String,
-    required: true,
-    trim: true
+    type: DataTypes.TEXT,
+    allowNull: false
   },
   status: {
-    type: String,
-    enum: ['new', 'read', 'replied', 'archived'],
-    default: 'new'
+    type: DataTypes.ENUM('new', 'read', 'replied', 'archived'),
+    defaultValue: 'new'
   },
   submittedAt: {
-    type: Date,
-    default: Date.now
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
   }
 }, {
   timestamps: true
 });
 
-module.exports = mongoose.model('ContactMessage', contactMessageSchema);
+module.exports = ContactMessage;
