@@ -227,7 +227,7 @@ export default function PatientDashboard() {
                     <>
                       <div className="sessions-list">
                         {upcomingSessions.slice(0, 3).map((session, index) => (
-                          <div key={session._id} className="session-item">
+                          <div key={session.id} className="session-item">
                             <div className="session-info">
                               <span className="session-date">{formatDate(session.date)}</span>
                               <span className="session-time">{session.time}</span>

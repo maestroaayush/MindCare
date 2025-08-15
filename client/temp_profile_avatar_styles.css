@@ -1,0 +1,14 @@
+.profile-avatar-large {
+  font-size: 120px;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  cursor: default;
+  display: block;
+  line-height: 1;
+}
+
+.profile-avatar-large:hover {
+  color: rgba(255, 255, 255, 1);
+  transform: scale(1.05);
+}

@@ -1,35 +1,33 @@
 const express = require('express');
 const router = express.Router();
-const ContactMessage = require('../models/ContactMessage');
+const { ContactMessage } = require('../models');
 
-// Submit contact form
-router.post('/submit', async (req, res) => {
+// Submit contact message
+router.post('/', async (req, res) => {
   try {
-  const { name, email, message } = req.body;
-
-  // Validate required fields
-  if (!name || !email || !message) {
-    return res.status(400).json({
-      success: false,
-      message: 'All fields are required'
-    });
-  }
-  
-  const contactMessage = new ContactMessage({
-    name,
-    email,
-    message
-  });
-  
-  await contactMessage.save();
+    const { name, email, message } = req.body;
     
-    res.status(201).json({ 
-      message: 'Contact message submitted successfully',
-      contactMessage 
+    const contactMessage = await ContactMessage.create({
+      name,
+      email,
+      message
     });
-  } catch (error) {
-    console.error('Error submitting contact message:', error);
-    res.status(500).json({ error: 'Failed to submit contact message' });
+    
+    res.status(201).json('Message sent successfully');
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+});
+
+// Get all contact messages (admin only)
+router.get('/', async (req, res) => {
+  try {
+    const messages = await ContactMessage.findAll({
+      order: [['createdAt', 'DESC']]
+    });
+    res.json(messages);
+  } catch (err) {
+    res.status(500).json(err.message);
   }
 });
 

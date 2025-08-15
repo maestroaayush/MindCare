@@ -57,7 +57,7 @@ export default function PsychiatristDashboard() {
               <p className="card-text">You have managed {allSessions.length} sessions:</p>
               <div className="sessions-list">
                 {allSessions.slice(0, 3).map((session) => (
-                  <div key={session._id} className="session-item">
+                  <div key={session.id} className="session-item">
                     <span className="session-date">{formatDate(session.date)}</span>
                     <span className="session-time">{session.time}</span>
                     <span className="session-patient">{session.patient?.name}</span>

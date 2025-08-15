@@ -42,7 +42,7 @@ const AdminPanel = () => {
     try {
       setTabLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/admin/contact-messages', {
+      const response = await axios.get('/api/admin/contact-messages', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setContactMessages(response.data);
@@ -63,7 +63,7 @@ const AdminPanel = () => {
         ? '/api/admin/users' 
         : `/api/admin/users/${filter}`;
       
-      const response = await axios.get(`http://localhost:5000${endpoint}`, {
+      const response = await axios.get(`${endpoint}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -80,7 +80,7 @@ const AdminPanel = () => {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/admin/stats', {
+      const response = await axios.get('/api/admin/stats', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setStats(response.data);
@@ -93,7 +93,7 @@ const AdminPanel = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:5000/api/admin/users/${userId}/approval`,
+        `/api/admin/users/${userId}/approval`,
         { approvalStatus: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -114,7 +114,7 @@ const AdminPanel = () => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`http://localhost:5000/api/admin/users/${userId}`, {
+        await axios.delete(`/api/admin/users/${userId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -293,7 +293,7 @@ const AdminPanel = () => {
                         </thead>
                         <tbody>
                           {users.map(user => (
-                            <tr key={user._id}>
+                            <tr key={user.id}>
                               <td>
                                 <div className="user-info">
                                   <span className="user-name">{user.name}</span>
@@ -309,13 +309,13 @@ const AdminPanel = () => {
                                     <>
                                       <button 
                                         className="btn-approve"
-                                        onClick={() => handleApprovalUpdate(user._id, 'approved')}
+                                        onClick={() => handleApprovalUpdate(user.id, 'approved')}
                                       >
                                         ✓ Approve
                                       </button>
                                       <button 
                                         className="btn-reject"
-                                        onClick={() => handleApprovalUpdate(user._id, 'rejected')}
+                                        onClick={() => handleApprovalUpdate(user.id, 'rejected')}
                                       >
                                         ✗ Reject
                                       </button>
@@ -324,7 +324,7 @@ const AdminPanel = () => {
                                   {user.approvalStatus === 'approved' && (
                                     <button 
                                       className="btn-reject"
-                                      onClick={() => handleApprovalUpdate(user._id, 'rejected')}
+                                      onClick={() => handleApprovalUpdate(user.id, 'rejected')}
                                     >
                                       ↩ Revoke
                                     </button>
@@ -332,7 +332,7 @@ const AdminPanel = () => {
                                   {user.approvalStatus === 'rejected' && (
                                     <button 
                                       className="btn-approve"
-                                      onClick={() => handleApprovalUpdate(user._id, 'approved')}
+                                      onClick={() => handleApprovalUpdate(user.id, 'approved')}
                                     >
                                       ✓ Approve
                                     </button>
@@ -340,7 +340,7 @@ const AdminPanel = () => {
                                   {user.role !== 'admin' && (
                                     <button 
                                       className="btn-delete"
-                                      onClick={() => handleDeleteUser(user._id)}
+                                      onClick={() => handleDeleteUser(user.id)}
                                     >
                                       🗑 Delete
                                     </button>
@@ -391,7 +391,7 @@ const AdminPanel = () => {
                           </thead>
                           <tbody>
                             {contactMessages.map((message) => (
-                              <tr key={message._id}>
+                              <tr key={message.id}>
                                 <td>{message.name}</td>
                                 <td>{message.email}</td>
                                 <td className="message-content">{message.message}</td>

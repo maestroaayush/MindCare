@@ -149,7 +149,7 @@ const sessionSlice = createSlice({
       })
       .addCase(updateSession.fulfilled, (state, action) => {
         state.updateLoading = false;
-        const index = state.sessions.findIndex(session => session._id === action.payload._id);
+        const index = state.sessions.findIndex(session => session.id === action.payload.id);
         if (index !== -1) {
           state.sessions[index] = action.payload;
         }
@@ -166,7 +166,7 @@ const sessionSlice = createSlice({
       })
       .addCase(deleteSession.fulfilled, (state, action) => {
         state.deleteLoading = false;
-        state.sessions = state.sessions.filter(session => session._id !== action.payload);
+        state.sessions = state.sessions.filter(session => session.id !== action.payload);
         state.error = null;
       })
       .addCase(deleteSession.rejected, (state, action) => {

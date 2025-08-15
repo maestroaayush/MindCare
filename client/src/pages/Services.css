@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-* {
+.services-page * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -14,14 +14,14 @@
   line-height: 1.6;
 }
 
-.container {
+.services-page .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
 /* Enhanced Hero Section */
-.services-hero {
+.services-page .services-hero {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   padding: 120px 0;
@@ -32,7 +32,7 @@
   border-radius: 12px;
 }
 
-.services-hero::before {
+.services-page .services-hero::before {
   content: '';
   position: absolute;
   top: 0;
@@ -46,7 +46,7 @@
   opacity: 0.8;
 }
 
-.services-hero .hero-content {
+.services-page .services-hero .hero-content {
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
@@ -57,19 +57,19 @@
   gap: 60px;
 }
 
-.hero-left {
+.services-page .hero-left {
   flex: 1;
   text-align: left;
 }
 
-.hero-right {
+.services-page .hero-right {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.services-hero h1 {
+.services-page .services-hero h1 {
   font-size: 4rem;
   font-weight: 800;
   margin-bottom: 16px;
@@ -82,7 +82,7 @@
   animation: slideInLeft 1s ease-out;
 }
 
-.services-hero .hero-subtitle {
+.services-page .services-hero .hero-subtitle {
   font-size: 1.6rem;
   font-weight: 600;
   margin-bottom: 24px;
@@ -91,7 +91,7 @@
   animation: fadeInUp 1s ease-out 0.5s backwards;
 }
 
-.services-hero .hero-description {
+.services-page .services-hero .hero-description {
   font-size: 1.2rem;
   margin-bottom: 40px;
   color: #dbeafe;
@@ -102,7 +102,7 @@
   animation: fadeInUp 1s ease-out 0.5s backwards;
 }
 
-.hero-badge {
+.services-page .hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -118,11 +118,11 @@
   animation: fadeInUp 1s ease-out 0.2s backwards;
 }
 
-.badge-icon {
+.services-page .badge-icon {
   font-size: 1.2rem;
 }
 
-.hero-stats {
+.services-page .hero-stats {
   display: flex;
   justify-content: center;
   gap: 40px;
@@ -130,11 +130,11 @@
   animation: fadeInUp 1s ease-out 0.7s backwards;
 }
 
-.stat {
+.services-page .stat {
   text-align: center;
 }
 
-.stat-number {
+.services-page .stat-number {
   font-size: 2.2rem;
   font-weight: 800;
   color: #ffffff;
@@ -142,14 +142,14 @@
   margin-bottom: 4px;
 }
 
-.stat-label {
+.services-page .stat-label {
   font-size: 0.9rem;
   color: #dbeafe;
   opacity: 0.9;
   font-weight: 500;
 }
 
-.hero-buttons {
+.services-page .hero-buttons {
   display: flex;
   gap: 20px;
   justify-content: center;
@@ -157,13 +157,13 @@
   animation: fadeInUp 1s ease-out 1s backwards;
 }
 
-.button-icon {
+.services-page .button-icon {
   margin-right: 8px;
   font-size: 1.1rem;
 }
 
 /* Hero Background Elements */
-.hero-overlay {
+.services-page .hero-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -173,7 +173,7 @@
   z-index: 1;
 }
 
-.hero-shapes {
+.services-page .hero-shapes {
   position: absolute;
   top: 0;
   left: 0;
@@ -183,14 +183,14 @@
   z-index: 1;
 }
 
-.shape {
+.services-page .shape {
   position: absolute;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
   animation: float 6s ease-in-out infinite;
 }
 
-.shape-1 {
+.services-page .shape-1 {
   width: 120px;
   height: 120px;
   top: 10%;
@@ -198,7 +198,7 @@
   animation-delay: 0s;
 }
 
-.shape-2 {
+.services-page .shape-2 {
   width: 80px;
   height: 80px;
   top: 60%;
@@ -206,7 +206,7 @@
   animation-delay: 2s;
 }
 
-.shape-3 {
+.services-page .shape-3 {
   width: 100px;
   height: 100px;
   bottom: 20%;
@@ -215,14 +215,14 @@
 }
 
 /* Hero Visual Elements */
-.hero-image-container {
+.services-page .hero-image-container {
   position: relative;
   width: 100%;
   height: 400px;
   animation: fadeInUp 1s ease-out 0.8s backwards;
 }
 
-.hero-visual {
+.services-page .hero-visual {
   position: relative;
   width: 100%;
   height: 300px;
@@ -236,13 +236,13 @@
   overflow: hidden;
 }
 
-.therapy-illustration {
+.services-page .therapy-illustration {
   position: relative;
   width: 250px;
   height: 200px;
 }
 
-.therapist-icon {
+.services-page .therapist-icon {
   position: absolute;
   font-size: 4rem;
   left: 20px;
@@ -251,7 +251,7 @@
   animation: float 3s ease-in-out infinite;
 }
 
-.patient-icon {
+.services-page .patient-icon {
   position: absolute;
   font-size: 4rem;
   right: 20px;
@@ -260,27 +260,27 @@
   animation: float 3s ease-in-out infinite 1s;
 }
 
-.conversation-bubble {
+.services-page .conversation-bubble {
   position: absolute;
   font-size: 2rem;
   animation: float 2s ease-in-out infinite;
 }
 
-.bubble-1 {
+.services-page .bubble-1 {
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
   animation-delay: 0.5s;
 }
 
-.bubble-2 {
+.services-page .bubble-2 {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   animation-delay: 1.5s;
 }
 
-.wellness-icons {
+.services-page .wellness-icons {
   position: absolute;
   top: 0;
   left: 0;
@@ -288,37 +288,37 @@
   bottom: 0;
 }
 
-.wellness-icon {
+.services-page .wellness-icon {
   position: absolute;
   font-size: 1.5rem;
   animation: float 4s ease-in-out infinite;
 }
 
-.icon-1 {
+.services-page .icon-1 {
   top: 10%;
   left: 10%;
   animation-delay: 0s;
 }
 
-.icon-2 {
+.services-page .icon-2 {
   top: 15%;
   right: 15%;
   animation-delay: 1s;
 }
 
-.icon-3 {
+.services-page .icon-3 {
   bottom: 15%;
   left: 15%;
   animation-delay: 2s;
 }
 
-.icon-4 {
+.services-page .icon-4 {
   bottom: 10%;
   right: 10%;
   animation-delay: 3s;
 }
 
-.feature-cards {
+.services-page .feature-cards {
   position: absolute;
   bottom: -20px;
   left: 0;
@@ -328,7 +328,7 @@
   gap: 10px;
 }
 
-.feature-card {
+.services-page .feature-card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-radius: 12px;
@@ -346,24 +346,24 @@
   flex: 1;
 }
 
-.card-1 {
+.services-page .card-1 {
   animation-delay: 1.2s;
 }
 
-.card-2 {
+.services-page .card-2 {
   animation-delay: 1.4s;
 }
 
-.card-3 {
+.services-page .card-3 {
   animation-delay: 1.6s;
 }
 
-.feature-icon {
+.services-page .feature-icon {
   font-size: 1.2rem;
   flex-shrink: 0;
 }
 
-.feature-text {
+.services-page .feature-text {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -381,7 +381,7 @@
 }
 
 /* Enhanced Button Styles */
-.cta-button {
+.services-page .cta-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -398,7 +398,7 @@
   min-width: 160px;
 }
 
-.cta-button::before {
+.services-page .cta-button::before {
   content: '';
   position: absolute;
   top: 0;
@@ -409,39 +409,39 @@
   transition: left 0.5s;
 }
 
-.cta-button:hover::before {
+.services-page .cta-button:hover::before {
   left: 100%;
 }
 
-.cta-button.primary {
+.services-page .cta-button.primary {
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   color: white;
   box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
 }
 
-.cta-button.secondary {
+.services-page .cta-button.secondary {
   background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
   color: white;
   box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
 }
 
-.cta-button:hover {
+.services-page .cta-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
 }
 
-.cta-button:active {
+.services-page .cta-button:active {
   transform: translateY(0);
 }
 
 /* Services Section */
-.services-section {
+.services-page .services-section {
   padding: 100px 0;
   background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
   position: relative;
 }
 
-.services-section::before {
+.services-page .services-section::before {
   content: '';
   position: absolute;
   top: 0;
@@ -454,14 +454,14 @@
   pointer-events: none;
 }
 
-.section-header {
+.services-page .section-header {
   margin-bottom: 70px;
   text-align: center;
   position: relative;
   z-index: 1;
 }
 
-.section-header h2 {
+.services-page .section-header h2 {
   font-size: 2.8rem;
   font-weight: 700;
   margin-bottom: 20px;
@@ -470,7 +470,7 @@
   position: relative;
 }
 
-.section-header h2::after {
+.services-page .section-header h2::after {
   content: '';
   position: absolute;
   bottom: -8px;
@@ -482,7 +482,7 @@
   border-radius: 2px;
 }
 
-.section-header p {
+.services-page .section-header p {
   color: #4a5568;
   font-size: 1.2rem;
   max-width: 650px;
@@ -491,7 +491,7 @@
 }
 
 /* Enhanced Service Grid */
-.service-grid {
+.services-page .service-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 32px;
@@ -501,7 +501,7 @@
   z-index: 1;
 }
 
-.service-card {
+.services-page .service-card {
   background: white;
   border-radius: 20px;
   padding: 32px;
@@ -513,7 +513,7 @@
   overflow: hidden;
 }
 
-.service-card::before {
+.services-page .service-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -525,16 +525,16 @@
   transition: transform 0.3s ease;
 }
 
-.service-card:hover::before {
+.services-page .service-card:hover::before {
   transform: scaleX(1);
 }
 
-.service-card:hover {
+.services-page .service-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-.service-icon {
+.services-page .service-icon {
   font-size: 3.5rem;
   margin-bottom: 24px;
   display: block;
@@ -542,7 +542,7 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.service-card h3 {
+.services-page .service-card h3 {
   font-size: 1.6rem;
   font-weight: 600;
   margin-bottom: 16px;
@@ -550,20 +550,20 @@
   line-height: 1.3;
 }
 
-.service-description {
+.services-page .service-description {
   color: #4a5568;
   font-size: 1.05rem;
   margin-bottom: 24px;
   line-height: 1.6;
 }
 
-.service-features {
+.services-page .service-features {
   list-style: none;
   margin-bottom: 32px;
   padding: 0;
 }
 
-.service-features li {
+.services-page .service-features li {
   display: flex;
   align-items: center;
   margin-bottom: 12px;
@@ -572,7 +572,7 @@
   line-height: 1.5;
 }
 
-.feature-check {
+.services-page .feature-check {
   color: #10b981;
   font-weight: 700;
   margin-right: 12px;
@@ -587,7 +587,7 @@
   flex-shrink: 0;
 }
 
-.service-footer {
+.services-page .service-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -596,13 +596,13 @@
   border-top: 1px solid #e2e8f0;
 }
 
-.service-price {
+.services-page .service-price {
   font-weight: 700;
   color: #1f2937;
   font-size: 1.1rem;
 }
 
-.service-cta {
+.services-page .service-cta {
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   color: white;
   padding: 10px 20px;
@@ -615,19 +615,19 @@
   cursor: pointer;
 }
 
-.service-cta:hover {
+.services-page .service-cta:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
 /* Specializations Section */
-.specializations-section {
+.services-page .specializations-section {
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
   padding: 100px 0;
   position: relative;
 }
 
-.specializations-section::before {
+.services-page .specializations-section::before {
   content: '';
   position: absolute;
   top: 0;
@@ -640,7 +640,7 @@
   pointer-events: none;
 }
 
-.specializations-grid {
+.services-page .specializations-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 32px;
@@ -650,7 +650,7 @@
   z-index: 1;
 }
 
-.specialization-card {
+.services-page .specialization-card {
   background: white;
   border-radius: 20px;
   padding: 32px;
@@ -661,32 +661,32 @@
   position: relative;
 }
 
-.specialization-card:hover {
+.services-page .specialization-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
-.spec-icon {
+.services-page .spec-icon {
   font-size: 3rem;
   margin-bottom: 20px;
   display: block;
 }
 
-.specialization-card h3 {
+.services-page .specialization-card h3 {
   font-size: 1.4rem;
   font-weight: 600;
   margin-bottom: 16px;
   color: #1a202c;
 }
 
-.specialization-card p {
+.services-page .specialization-card p {
   color: #4a5568;
   line-height: 1.6;
   font-size: 1rem;
 }
 
 /* Final CTA Section */
-.services-cta {
+.services-page .services-cta {
   padding: 100px 0;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -695,7 +695,7 @@
   overflow: hidden;
 }
 
-.services-cta::before {
+.services-page .services-cta::before {
   content: '';
   position: absolute;
   top: 0;
@@ -708,28 +708,28 @@
   z-index: 1;
 }
 
-.cta-content {
+.services-page .cta-content {
   max-width: 800px;
   margin: 0 auto;
   position: relative;
   z-index: 2;
 }
 
-.cta-content h2 {
+.services-page .cta-content h2 {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 20px;
   letter-spacing: -0.5px;
 }
 
-.cta-content p {
+.services-page .cta-content p {
   font-size: 1.2rem;
   margin-bottom: 40px;
   opacity: 0.95;
   line-height: 1.6;
 }
 
-.cta-buttons {
+.services-page .cta-buttons {
   display: flex;
   gap: 20px;
   justify-content: center;
@@ -770,135 +770,135 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .services-hero {
+  .services-page .services-hero {
     padding: 80px 0;
   }
   
-  .services-hero .hero-content {
+  .services-page .services-hero .hero-content {
     flex-direction: column;
     gap: 40px;
     text-align: center;
   }
   
-  .hero-left {
+  .services-page .hero-left {
     text-align: center;
   }
   
-  .hero-stats {
+  .services-page .hero-stats {
     justify-content: center;
     gap: 30px;
   }
   
-  .services-hero h1 {
+  .services-page .services-hero h1 {
     font-size: 2.8rem;
   }
   
-  .services-hero .hero-subtitle {
+  .services-page .services-hero .hero-subtitle {
     font-size: 1.2rem;
   }
   
-  .services-hero .hero-description {
+  .services-page .services-hero .hero-description {
     font-size: 1rem;
   }
   
-  .hero-buttons {
+  .services-page .hero-buttons {
     flex-direction: column;
     align-items: center;
   }
   
-  .cta-button {
+  .services-page .cta-button {
     width: 100%;
     max-width: 280px;
   }
   
-  .hero-image-container {
+  .services-page .hero-image-container {
     height: 300px;
   }
   
-  .hero-visual {
+  .services-page .hero-visual {
     height: 250px;
   }
   
-  .therapy-illustration {
+  .services-page .therapy-illustration {
     width: 200px;
     height: 160px;
   }
   
-  .therapist-icon,
-  .patient-icon {
+  .services-page .therapist-icon,
+  .services-page .patient-icon {
     font-size: 3rem;
   }
   
-  .feature-cards {
+  .services-page .feature-cards {
     gap: 8px;
   }
   
-  .feature-card {
+  .services-page .feature-card {
     padding: 8px 12px;
     font-size: 0.7rem;
   }
   
-  .feature-icon {
+  .services-page .feature-icon {
     font-size: 1rem;
   }
   
-  .services-section,
-  .specializations-section,
-  .services-cta {
+  .services-page .services-section,
+  .services-page .specializations-section,
+  .services-page .services-cta {
     padding: 80px 0;
   }
   
-  .section-header h2 {
+  .services-page .section-header h2 {
     font-size: 2.4rem;
   }
   
-  .service-grid {
+  .services-page .service-grid {
     grid-template-columns: 1fr;
     gap: 24px;
   }
   
-  .service-card {
+  .services-page .service-card {
     padding: 24px;
   }
   
-  .specializations-grid {
+  .services-page .specializations-grid {
     grid-template-columns: 1fr;
     gap: 24px;
   }
   
-  .cta-content h2 {
+  .services-page .cta-content h2 {
     font-size: 2.2rem;
   }
   
-  .cta-buttons {
+  .services-page .cta-buttons {
     flex-direction: column;
     align-items: center;
   }
 }
 
 @media (max-width: 480px) {
-  .services-hero h1 {
+  .services-page .services-hero h1 {
     font-size: 2.4rem;
   }
   
-  .section-header h2 {
+  .services-page .section-header h2 {
     font-size: 2rem;
   }
   
-  .service-card,
-  .specialization-card {
+  .services-page .service-card,
+  .services-page .specialization-card {
     padding: 20px;
   }
   
-  .service-icon {
+  .services-page .service-icon {
     font-size: 3rem;
   }
   
-  .spec-icon {
+  .services-page .spec-icon {
     font-size: 2.5rem;
   }
   
-  .cta-content h2 {
+  .services-page .cta-content h2 {
     font-size: 2rem;
   }
 }

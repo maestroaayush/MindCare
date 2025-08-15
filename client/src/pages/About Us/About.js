@@ -8,24 +8,24 @@ export default function About() {
     setTimeout(() => {
       setTeam([
         {
-          name: 'John Doe',
+          name: 'Kritagya Shahi',
+          role: 'Full Stack Developer',
+          image: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f468-200d-1f4bb.png'
+        },
+        {
+          name: 'Aayush Bhandari',
           role: 'Frontend Developer',
           image: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f468-200d-1f4bb.png'
         },
         {
-          name: 'Maya Singh',
-          role: 'Backend Developer',
-          image: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f469-200d-1f4bb.png'
-        },
-        {
-          name: 'Ali Tan',
+          name: 'Bijay Neupane',
           role: 'UI/UX Designer',
-          image: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9d1-200d-1f3a8.png'
+          image: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f468-200d-1f3a8.png'
         },
         {
-          name: 'Sarah Lim',
-          role: 'Project Coordinator',
-          image: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f469-200d-1f4bc.png'
+          name: 'Pramod Paswan',
+          role: 'Deployment',
+          image: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f468-200d-1f4bb.png'
         }
       ]);
     }, 500);
@@ -46,8 +46,8 @@ export default function About() {
       <div className="section">
         <p>
           MindCare connects individuals to mental health professionals through secure digital services like
-          telepsychiatry and online counseling. We’re passionate about reducing stigma and improving access—
-          whether you’re in a city or a rural village.
+          telepsychiatry and online counseling. We're passionate about reducing stigma and improving access—
+          whether you're in a city or a rural village.
         </p>
         <p>
           Our goal is to make mental wellness more approachable, compassionate, and accessible to everyone.

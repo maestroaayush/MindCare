@@ -117,7 +117,7 @@ export default function Resources() {
           <div style={styles.noResources}>No resources found</div>
         ) : (
           resources.map((resource) => (
-            <li key={resource._id} style={styles.item}>
+            <li key={resource.id} style={styles.item}>
               <div style={styles.resourceHeader}>
                 <h4 style={styles.resourceTitle}>{resource.title}</h4>
                 <span style={styles.resourceType}>{formatCategory(resource.type)}</span>
@@ -138,7 +138,7 @@ export default function Resources() {
                 </div>
                 <div style={styles.actions}>
                   <button 
-                    onClick={() => handleLike(resource._id)}
+                    onClick={() => handleLike(resource.id)}
                     style={styles.likeButton}
                   >
                     Like

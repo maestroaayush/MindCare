@@ -205,11 +205,11 @@ const resourceSlice = createSlice({
       })
       .addCase(updateResource.fulfilled, (state, action) => {
         state.updateLoading = false;
-        const index = state.resources.findIndex(resource => resource._id === action.payload._id);
+        const index = state.resources.findIndex(resource => resource.id === action.payload.id);
         if (index !== -1) {
           state.resources[index] = action.payload;
         }
-        if (state.currentResource && state.currentResource._id === action.payload._id) {
+        if (state.currentResource && state.currentResource.id === action.payload.id) {
           state.currentResource = action.payload;
         }
         state.error = null;
@@ -225,9 +225,9 @@ const resourceSlice = createSlice({
       })
       .addCase(deleteResource.fulfilled, (state, action) => {
         state.deleteLoading = false;
-        state.resources = state.resources.filter(resource => resource._id !== action.payload);
+        state.resources = state.resources.filter(resource => resource.id !== action.payload);
         state.total -= 1;
-        if (state.currentResource && state.currentResource._id === action.payload) {
+        if (state.currentResource && state.currentResource.id === action.payload) {
           state.currentResource = null;
         }
         state.error = null;
@@ -243,11 +243,11 @@ const resourceSlice = createSlice({
       .addCase(likeResource.fulfilled, (state, action) => {
         state.likeLoading = false;
         const { id, likes } = action.payload;
-        const index = state.resources.findIndex(resource => resource._id === id);
+        const index = state.resources.findIndex(resource => resource.id === id);
         if (index !== -1) {
           state.resources[index].likes = likes;
         }
-        if (state.currentResource && state.currentResource._id === id) {
+        if (state.currentResource && state.currentResource.id === id) {
           state.currentResource.likes = likes;
         }
       })

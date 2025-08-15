@@ -1,38 +1,97 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ['patient', 'psychiatrist', 'admin'], default: 'patient' },
-  approvalStatus: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
-  profilePic: { type: String },
+const User = sequelize.define('User', {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true,
+    },
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  role: {
+    type: DataTypes.ENUM('patient', 'psychiatrist', 'admin'),
+    defaultValue: 'patient',
+  },
+  approvalStatus: {
+    type: DataTypes.ENUM('pending', 'approved', 'rejected'),
+    defaultValue: 'pending',
+  },
+  profilePic: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   
   // Additional fields for psychiatrists
-  specialization: { type: String },
-  licenseNumber: { type: String },
-  experience: { type: Number }, // years
-  bio: { type: String },
+  specialization: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  licenseNumber: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  experience: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  bio: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  location: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   
   // Additional fields for patients
-  dateOfBirth: { type: Date },
-  phone: { type: String },
+  dateOfBirth: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   emergencyContact: {
-    name: { type: String },
-    phone: { type: String },
-    relationship: { type: String }
+    type: DataTypes.JSONB,
+    allowNull: true,
   },
   
   // Common fields
-  isActive: { type: Boolean, default: true },
-  lastLogin: { type: Date },
+  isActive: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+  },
+  lastLogin: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
   preferences: {
-    notifications: { type: Boolean, default: true },
-    theme: { type: String, enum: ['light', 'dark'], default: 'light' },
-    language: { type: String, default: 'en' }
-  }
+    type: DataTypes.JSONB,
+    defaultValue: {
+      notifications: true,
+      theme: 'light',
+      language: 'en'
+    },
+  },
 }, {
-  timestamps: true
+  tableName: 'users',
+  timestamps: true,
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = User;

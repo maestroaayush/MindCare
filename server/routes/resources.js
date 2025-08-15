@@ -1,163 +1,106 @@
-const router = require('express').Router();
-const Resource = require('../models/Resource');
+const express = require('express');
+const router = express.Router();
 const auth = require('../middleware/auth');
+const { Resource, User } = require('../models');
 
-// GET all resources with filtering and pagination
-router.get('/', auth, async (req, res) => {
+// Get all resources
+router.get('/', async (req, res) => {
   try {
-    const { type, category, difficulty, page = 1, limit = 10 } = req.query;
-    
-    let query = { isPublished: true };
-    
-    // Add filters
-    if (type) query.type = type;
-    if (category) query.category = category;
-    if (difficulty) query.difficulty = difficulty;
-    
-    const resources = await Resource.find(query)
-      .populate('author', 'name email')
-      .sort({ createdAt: -1 })
-      .limit(limit * 1)
-      .skip((page - 1) * limit);
-    
-    const total = await Resource.countDocuments(query);
-    
-    res.json({
-      resources,
-      totalPages: Math.ceil(total / limit),
-      currentPage: page,
-      total
+    const resources = await Resource.findAll({
+      include: [{
+        model: User,
+        as: 'author',
+        attributes: ['id', 'name']
+      }],
+      where: { isPublished: true }
     });
+    res.json(resources);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json(err.message);
   }
 });
 
-// GET a specific resource by ID
-router.get('/:id', auth, async (req, res) => {
+// Get resource by ID
+router.get('/:id', async (req, res) => {
   try {
-    const resource = await Resource.findById(req.params.id)
-      .populate('author', 'name email specialization');
+    const resource = await Resource.findByPk(req.params.id, {
+      include: [{
+        model: User,
+        as: 'author',
+        attributes: ['id', 'name']
+      }]
+    });
     
     if (!resource) {
-      return res.status(404).json({ message: 'Resource not found' });
+      return res.status(404).json('Resource not found');
     }
     
-    // Increment view count
-    await Resource.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
+    // Increment views
+    await resource.increment('views');
     
     res.json(resource);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json(err.message);
   }
 });
 
-// POST a new resource (psychiatrist only)
+// Create new resource (admin only)
 router.post('/', auth, async (req, res) => {
   try {
-    if (req.user.role !== 'psychiatrist') {
-      return res.status(403).json({ message: 'Only psychiatrists can create resources' });
+    if (req.user.role !== 'admin') {
+      return res.status(403).json('Access denied');
     }
     
-    const resource = new Resource({
+    const resource = await Resource.create({
       ...req.body,
-      author: req.user.id
+      authorId: req.user.id
     });
     
-    await resource.save();
-    
-    const populatedResource = await Resource.findById(resource._id)
-      .populate('author', 'name email');
-    
-    res.status(201).json(populatedResource);
+    res.status(201).json(resource);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json(err.message);
   }
 });
 
-// PUT update a resource
+// Update resource (admin only)
 router.put('/:id', auth, async (req, res) => {
   try {
-    const resource = await Resource.findById(req.params.id);
-    
-    if (!resource) {
-      return res.status(404).json({ message: 'Resource not found' });
+    if (req.user.role !== 'admin') {
+      return res.status(403).json('Access denied');
     }
     
-    // Only the author can update the resource
-    if (resource.author.toString() !== req.user.id) {
-      return res.status(403).json({ message: 'Not authorized' });
-    }
+    await Resource.update(req.body, {
+      where: { id: req.params.id }
+    });
     
-    const updatedResource = await Resource.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    ).populate('author', 'name email');
+    const updatedResource = await Resource.findByPk(req.params.id, {
+      include: [{
+        model: User,
+        as: 'author',
+        attributes: ['id', 'name']
+      }]
+    });
     
     res.json(updatedResource);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json(err.message);
   }
 });
 
-// DELETE a resource
+// Delete resource (admin only)
 router.delete('/:id', auth, async (req, res) => {
   try {
-    const resource = await Resource.findById(req.params.id);
-    
-    if (!resource) {
-      return res.status(404).json({ message: 'Resource not found' });
+    if (req.user.role !== 'admin') {
+      return res.status(403).json('Access denied');
     }
     
-    // Only the author can delete the resource
-    if (resource.author.toString() !== req.user.id) {
-      return res.status(403).json({ message: 'Not authorized' });
-    }
+    await Resource.destroy({
+      where: { id: req.params.id }
+    });
     
-    await Resource.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Resource deleted successfully' });
+    res.json('Resource deleted');
   } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// POST like a resource
-router.post('/:id/like', auth, async (req, res) => {
-  try {
-    const resource = await Resource.findByIdAndUpdate(
-      req.params.id,
-      { $inc: { likes: 1 } },
-      { new: true }
-    );
-    
-    if (!resource) {
-      return res.status(404).json({ message: 'Resource not found' });
-    }
-    
-    res.json({ likes: resource.likes });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// GET resource categories
-router.get('/meta/categories', auth, async (req, res) => {
-  try {
-    const categories = await Resource.distinct('category');
-    res.json(categories);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// GET resource types
-router.get('/meta/types', auth, async (req, res) => {
-  try {
-    const types = await Resource.distinct('type');
-    res.json(types);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(400).json(err.message);
   }
 });
 

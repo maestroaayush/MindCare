@@ -1,44 +1,55 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const sessionSchema = new mongoose.Schema({
-  patient: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+const Session = sequelize.define('Session', {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
   },
-  psychiatrist: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+  patientId: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    references: {
+      model: 'users',
+      key: 'id',
+    },
+  },
+  psychiatristId: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    references: {
+      model: 'users',
+      key: 'id',
+    },
   },
   date: {
-    type: Date,
-    required: true
+    type: DataTypes.DATE,
+    allowNull: false,
   },
   time: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   duration: {
-    type: Number,
-    default: 60 // minutes
+    type: DataTypes.INTEGER,
+    defaultValue: 60,
   },
   status: {
-    type: String,
-    enum: ['scheduled', 'completed', 'cancelled'],
-    default: 'scheduled'
+    type: DataTypes.ENUM('scheduled', 'completed', 'cancelled'),
+    defaultValue: 'scheduled',
   },
   notes: {
-    type: String,
-    default: ''
+    type: DataTypes.TEXT,
+    defaultValue: '',
   },
   sessionType: {
-    type: String,
-    enum: ['individual', 'group', 'emergency'],
-    default: 'individual'
-  }
+    type: DataTypes.ENUM('individual', 'group', 'emergency'),
+    defaultValue: 'individual',
+  },
 }, {
-  timestamps: true
+  tableName: 'sessions',
+  timestamps: true,
 });
 
-module.exports = mongoose.model('Session', sessionSchema);
+module.exports = Session;

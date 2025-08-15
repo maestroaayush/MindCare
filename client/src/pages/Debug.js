@@ -10,7 +10,7 @@ export default function Debug() {
     
     try {
       // Test 1: Server connection
-      const healthCheck = await fetch('http://localhost:5000/api/auth/login', {
+      const healthCheck = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: 'test', password: 'test' })
@@ -19,7 +19,7 @@ export default function Debug() {
       setResult(prev => prev + '\n✅ Server is responding');
       
       // Test 2: Sample login
-      const loginResponse = await fetch('http://localhost:5000/api/auth/login', {
+      const loginResponse = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

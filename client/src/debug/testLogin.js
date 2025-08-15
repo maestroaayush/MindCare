@@ -1,5 +1,5 @@
 // Simple test script to debug login functionality
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = '/api';
 
 const testLogin = async () => {
   try {

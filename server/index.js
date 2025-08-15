@@ -1,6 +1,6 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
+const { sequelize } = require('./models');
 require('dotenv').config();
 
 const app = express();
@@ -15,12 +15,22 @@ app.use('/api/admin', require('./routes/admin'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/uploads', express.static('uploads'));
 
-
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(process.env.MONGO_URI)
-.then(() => {
-  console.log('MongoDB connected');
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-})
-.catch(err => console.log(err));
+// Connect to PostgreSQL and sync models
+sequelize.authenticate()
+  .then(async () => {
+    console.log('PostgreSQL connected successfully');
+    
+    // Sync all models (create tables)
+    await sequelize.sync({ alter: true });
+    console.log('Database synced successfully');
+    
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log(`Server accessible at http://52.91.191.129:${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });

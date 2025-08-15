@@ -1,24 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
-const User = require('../models/User');
-const ContactMessage = require('../models/ContactMessage');
+const { User, Resource, Session, ContactMessage } = require('../models');
 
-// Middleware to check if user is admin
-const isAdmin = async (req, res, next) => {
-  try {
-    const user = await User.findByPk(req.user.id);
-    if (user.role !== 'admin') {
-      return res.status(403).json('Access denied. Admin privileges required.');
-    }
-    next();
-  } catch (err) {
-    res.status(500).json(err.message);
+// Middleware to check admin role
+const adminAuth = (req, res, next) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json('Admin access required');
   }
+  next();
 };
 
-// Get all users for admin panel
-router.get('/users', auth, isAdmin, async (req, res) => {
+// Get all users
+router.get('/users', auth, adminAuth, async (req, res) => {
   try {
     const users = await User.findAll({
       attributes: { exclude: ['password'] },
@@ -30,8 +24,8 @@ router.get('/users', auth, isAdmin, async (req, res) => {
   }
 });
 
-// Get users by approval status
-router.get('/users/:status', auth, isAdmin, async (req, res) => {
+// Get users by status
+router.get('/users/:status', auth, adminAuth, async (req, res) => {
   try {
     const { status } = req.params;
     const users = await User.findAll({
@@ -46,54 +40,110 @@ router.get('/users/:status', auth, isAdmin, async (req, res) => {
 });
 
 // Update user approval status
-router.put('/users/:id/approval', auth, isAdmin, async (req, res) => {
+router.put('/users/:id/approval', auth, adminAuth, async (req, res) => {
   try {
-    const { id } = req.params;
     const { approvalStatus } = req.body;
-    
-    if (!['pending', 'approved', 'rejected'].includes(approvalStatus)) {
-      return res.status(400).json('Invalid approval status');
-    }
     
     await User.update(
       { approvalStatus },
-      { where: { id } }
+      { where: { id: req.params.id } }
     );
-
-    const user = await User.findByPk(id, {
+    
+    const updatedUser = await User.findByPk(req.params.id, {
       attributes: { exclude: ['password'] }
     });
     
-    if (!user) {
-      return res.status(404).json('User not found');
-    }
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+});
+
+// Delete user
+router.delete('/users/:id', auth, adminAuth, async (req, res) => {
+  try {
+    await User.destroy({
+      where: { id: req.params.id }
+    });
+    res.json('User deleted successfully');
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+});
+
+// Get dashboard stats
+router.get('/stats', auth, adminAuth, async (req, res) => {
+  try {
+    const totalUsers = await User.count();
+    const pendingUsers = await User.count({ where: { approvalStatus: 'pending' } });
+    const approvedUsers = await User.count({ where: { approvalStatus: 'approved' } });
+    const rejectedUsers = await User.count({ where: { approvalStatus: 'rejected' } });
+    const totalPatients = await User.count({ where: { role: 'patient' } });
+    const totalPsychiatrists = await User.count({ where: { role: 'psychiatrist' } });
+    const totalResources = await Resource.count();
+    const totalSessions = await Session.count();
+    const contactMessages = await ContactMessage.count();
     
-    res.json(user);
+    res.json({
+      totalUsers,
+      pendingUsers,
+      approvedUsers,
+      rejectedUsers,
+      totalPatients,
+      totalPsychiatrists,
+      totalResources,
+      totalSessions,
+      contactMessages
+    });
   } catch (err) {
     res.status(500).json(err.message);
   }
 });
 
-// Delete user
-router.delete('/users/:id', auth, isAdmin, async (req, res) => {
+// Get all sessions (admin view)
+router.get('/sessions', auth, adminAuth, async (req, res) => {
   try {
-    const { id } = req.params;
-    const deleted = await User.destroy({
-      where: { id }
+    const sessions = await Session.findAll({
+      include: [
+        {
+          model: User,
+          as: 'patient',
+          attributes: ['id', 'name', 'email']
+        },
+        {
+          model: User,
+          as: 'psychiatrist',
+          attributes: ['id', 'name', 'email']
+        }
+      ],
+      order: [['date', 'DESC']]
     });
     
-    if (!deleted) {
-      return res.status(404).json('User not found');
-    }
-    
-    res.json('User deleted successfully');
+    res.json(sessions);
+  } catch (err) {
+    res.status(500).json(err.message);
+  }
+});
+
+// Get all resources (admin view)
+router.get('/resources', auth, adminAuth, async (req, res) => {
+  try {
+    const resources = await Resource.findAll({
+      include: [{
+        model: User,
+        as: 'author',
+        attributes: ['id', 'name']
+      }],
+      order: [['createdAt', 'DESC']]
+    });
+    res.json(resources);
   } catch (err) {
     res.status(500).json(err.message);
   }
 });
 
 // Get all contact messages
-router.get('/contact-messages', auth, isAdmin, async (req, res) => {
+router.get('/contact-messages', auth, adminAuth, async (req, res) => {
   try {
     const messages = await ContactMessage.findAll({
       order: [['createdAt', 'DESC']]
@@ -105,80 +155,19 @@ router.get('/contact-messages', auth, isAdmin, async (req, res) => {
 });
 
 // Update contact message status
-router.put('/contact-messages/:id/status', auth, isAdmin, async (req, res) => {
+router.put('/contact-messages/:id', auth, adminAuth, async (req, res) => {
   try {
-    const { id } = req.params;
     const { status } = req.body;
-    
-    if (!['new', 'read', 'replied', 'archived'].includes(status)) {
-      return res.status(400).json('Invalid status');
-    }
     
     await ContactMessage.update(
       { status },
-      { where: { id } }
+      { where: { id: req.params.id } }
     );
-
-    const message = await ContactMessage.findByPk(id);
     
-    if (!message) {
-      return res.status(404).json('Contact message not found');
-    }
-    
-    res.json(message);
+    const updatedMessage = await ContactMessage.findByPk(req.params.id);
+    res.json(updatedMessage);
   } catch (err) {
-    res.status(500).json(err.message);
-  }
-});
-
-// Delete contact message
-router.delete('/contact-messages/:id', auth, isAdmin, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleted = await ContactMessage.destroy({
-      where: { id }
-    });
-    
-    if (!deleted) {
-      return res.status(404).json('Contact message not found');
-    }
-    
-    res.json('Contact message deleted successfully');
-  } catch (err) {
-    res.status(500).json(err.message);
-  }
-});
-
-// Get admin dashboard stats
-router.get('/stats', auth, isAdmin, async (req, res) => {
-  try {
-    const totalUsers = await User.count();
-    const pendingUsers = await User.count({ where: { approvalStatus: 'pending' } });
-    const approvedUsers = await User.count({ where: { approvalStatus: 'approved' } });
-    const rejectedUsers = await User.count({ where: { approvalStatus: 'rejected' } });
-    const patients = await User.count({ where: { role: 'patient' } });
-    const psychiatrists = await User.count({ where: { role: 'psychiatrist' } });
-    const totalMessages = await ContactMessage.count();
-    const newMessages = await ContactMessage.count({ where: { status: 'new' } });
-    const readMessages = await ContactMessage.count({ where: { status: 'read' } });
-    const repliedMessages = await ContactMessage.count({ where: { status: 'replied' } });
-    const archivedMessages = await ContactMessage.count({ where: { status: 'archived' } });
-    
-    res.json({
-      totalUsers,
-      pendingUsers,
-      approvedUsers,
-      rejectedUsers,
-      patients,
-      psychiatrists,
-      totalMessages,
-      newMessages,
-      readMessages,
-      repliedMessages,
-      archivedMessages
-    });
-  } catch (err) {
-    res.status(500).json(err.message);
+    res.status(400).json(err.message);
   }
 });
 

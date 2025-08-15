@@ -78,7 +78,7 @@ const AdminPanel = () => {
       
       // Update local state
       setUsers(users.map(user => 
-        user._id === userId ? { ...user, approvalStatus: newStatus } : user
+        user.id === userId ? { ...user, approvalStatus: newStatus } : user
       ));
       
       // Refresh stats
@@ -96,12 +96,12 @@ const AdminPanel = () => {
     if (!userToDelete) return;
     
     try {
-      await axios.delete(`/api/admin/users/${userToDelete._id}`, {
+      await axios.delete(`/api/admin/users/${userToDelete.id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       
       // Remove from local state
-      setUsers(users.filter(user => user._id !== userToDelete._id));
+      setUsers(users.filter(user => user.id !== userToDelete.id));
       
       // Refresh stats
       fetchStats();
@@ -173,7 +173,7 @@ const AdminPanel = () => {
       
       // Update local state
       setContactMessages(contactMessages.map(message => 
-        message._id === messageId ? { ...message, status: newStatus } : message
+        message.id === messageId ? { ...message, status: newStatus } : message
       ));
       
       // Refresh stats
@@ -190,12 +190,12 @@ const AdminPanel = () => {
     if (!contactToDelete) return;
     
     try {
-      await axios.delete(`/api/admin/contact-messages/${contactToDelete._id}`, {
+      await axios.delete(`/api/admin/contact-messages/${contactToDelete.id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       
       // Remove from local state
-      setContactMessages(contactMessages.filter(message => message._id !== contactToDelete._id));
+      setContactMessages(contactMessages.filter(message => message.id !== contactToDelete.id));
       
       // Refresh stats
       fetchContactStats();
@@ -356,7 +356,7 @@ const AdminPanel = () => {
                   </tr>
                 ) : (
                   users.map(user => (
-                    <tr key={user._id}>
+                    <tr key={user.id}>
                       <td>{user.name}</td>
                       <td>{user.email}</td>
                       <td>{getRoleBadge(user.role)}</td>
@@ -367,13 +367,13 @@ const AdminPanel = () => {
                           {user.approvalStatus === 'pending' && (
                             <>
                               <button 
-                                onClick={() => handleApprovalUpdate(user._id, 'approved')}
+                                onClick={() => handleApprovalUpdate(user.id, 'approved')}
                                 className="btn-approve"
                               >
                                 Approve
                               </button>
                               <button 
-                                onClick={() => handleApprovalUpdate(user._id, 'rejected')}
+                                onClick={() => handleApprovalUpdate(user.id, 'rejected')}
                                 className="btn-reject"
                               >
                                 Reject
@@ -382,7 +382,7 @@ const AdminPanel = () => {
                           )}
                           {user.approvalStatus === 'approved' && (
                             <button 
-                              onClick={() => handleApprovalUpdate(user._id, 'rejected')}
+                              onClick={() => handleApprovalUpdate(user.id, 'rejected')}
                               className="btn-reject"
                             >
                               Revoke
@@ -390,7 +390,7 @@ const AdminPanel = () => {
                           )}
                           {user.approvalStatus === 'rejected' && (
                             <button 
-                              onClick={() => handleApprovalUpdate(user._id, 'approved')}
+                              onClick={() => handleApprovalUpdate(user.id, 'approved')}
                               className="btn-approve"
                             >
                               Approve
@@ -442,7 +442,7 @@ const AdminPanel = () => {
                   </tr>
                 ) : (
                   contactMessages.map(message => (
-                    <tr key={message._id}>
+                    <tr key={message.id}>
                       <td>{message.name}</td>
                       <td>{message.email}</td>
                       <td className="message-content">
@@ -457,13 +457,13 @@ const AdminPanel = () => {
                           {message.status === 'unread' && (
                             <>
                               <button 
-                                onClick={() => handleContactStatusUpdate(message._id, 'read')}
+                                onClick={() => handleContactStatusUpdate(message.id, 'read')}
                                 className="btn-read"
                               >
                                 Mark Read
                               </button>
                               <button 
-                                onClick={() => handleContactStatusUpdate(message._id, 'responded')}
+                                onClick={() => handleContactStatusUpdate(message.id, 'responded')}
                                 className="btn-respond"
                               >
                                 Mark Responded
@@ -473,13 +473,13 @@ const AdminPanel = () => {
                           {message.status === 'read' && (
                             <>
                               <button 
-                                onClick={() => handleContactStatusUpdate(message._id, 'unread')}
+                                onClick={() => handleContactStatusUpdate(message.id, 'unread')}
                                 className="btn-unread"
                               >
                                 Mark Unread
                               </button>
                               <button 
-                                onClick={() => handleContactStatusUpdate(message._id, 'responded')}
+                                onClick={() => handleContactStatusUpdate(message.id, 'responded')}
                                 className="btn-respond"
                               >
                                 Mark Responded
@@ -489,13 +489,13 @@ const AdminPanel = () => {
                           {message.status === 'responded' && (
                             <>
                               <button 
-                                onClick={() => handleContactStatusUpdate(message._id, 'read')}
+                                onClick={() => handleContactStatusUpdate(message.id, 'read')}
                                 className="btn-read"
                               >
                                 Mark Read
                               </button>
                               <button 
-                                onClick={() => handleContactStatusUpdate(message._id, 'unread')}
+                                onClick={() => handleContactStatusUpdate(message.id, 'unread')}
                                 className="btn-unread"
                               >
                                 Mark Unread

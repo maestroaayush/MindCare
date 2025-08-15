@@ -26,6 +26,7 @@
   position: relative;
   z-index: 1;
   overflow: hidden;
+  padding: 40px 20px;
 }
 
 .hero::before {
@@ -56,18 +57,20 @@
   display: flex;
   align-items: center;
   gap: 60px;
-  padding: 0 40px;
   max-width: 1200px;
+  width: 100%;
   animation: fadeInUp 0.8s ease-out;
 }
 
 .hero-image-container {
-  flex-shrink: 0;
+  flex: 0 0 auto;
   animation: float 3s ease-in-out infinite;
+  text-align: center;
 }
 
 .hero-img {
-  max-width: 380px;
+  max-width: 350px;
+  width: 100%;
   height: auto;
   filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));
 }
@@ -75,10 +78,11 @@
 .hero-text {
   flex: 1;
   text-align: left;
+  min-width: 0; /* Prevents flex item from overflowing */
 }
 
 .hero h1 {
-  font-size: 3.8rem;
+  font-size: 3.2rem;
   letter-spacing: -1.5px;
   font-weight: 700;
   margin-bottom: 24px;
@@ -91,14 +95,14 @@
 
 .hero-subtitle {
   color: #e8f4f8;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   margin-bottom: 16px;
   font-weight: 400;
   animation: slideInLeft 0.8s ease-out 0.4s both;
 }
 
 .hero-description {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   color: #dbeafe;
   margin-bottom: 32px;
   line-height: 1.7;
@@ -107,8 +111,9 @@
 
 .hero-buttons {
   display: flex;
-  gap: 24px;
+  gap: 20px;
   animation: slideInUp 0.8s ease-out 0.8s both;
+  flex-wrap: wrap;
 }
 
 .cta-button {
@@ -125,6 +130,7 @@
   justify-content: center;
   border: none;
   cursor: pointer;
+  min-width: 160px;
 }
 
 .cta-button::before {
@@ -228,7 +234,6 @@
   margin-bottom: 60px;
   position: relative;
   z-index: 1;
-  /* text-align: center; */
 }
 
 .home .section-header h2 {
@@ -280,22 +285,6 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.8);
-}
-
-.home .service-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-
-.home .service-card:hover::before {
-  transform: scaleX(1);
 }
 
 .home .service-card:hover {
@@ -365,19 +354,6 @@
   position: relative;
 }
 
-.home .testimonials::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.02) 0%, transparent 50%),
-    radial-gradient(circle at 85% 85%, rgba(59, 130, 246, 0.02) 0%, transparent 50%);
-  pointer-events: none;
-}
-
 .home .testimonial-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -397,17 +373,6 @@
   padding: 32px;
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.8);
-}
-
-.home .testimonial-card::before {
-  content: '"';
-  position: absolute;
-  top: 20px;
-  right: 32px;
-  font-size: 4rem;
-  color: rgba(59, 130, 246, 0.1);
-  font-family: Georgia, serif;
-  line-height: 1;
 }
 
 .home .testimonial-card:hover {
@@ -507,18 +472,25 @@
   100% { transform: rotate(360deg); }
 }
 
-.section-separator {
-  width: 100%;
-  max-width: full-width;
-  border: none;
-  border-top: solid #444950;
-  opacity: 1;
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+  .hero-content {
+    gap: 40px;
+  }
+  
+  .hero-img {
+    max-width: 300px;
+  }
+  
+  .hero h1 {
+    font-size: 2.8rem;
+  }
 }
 
-/* Enhanced Mobile Responsiveness */
 @media (max-width: 768px) {
   .hero {
     padding: 40px 20px;
+    min-height: 80vh;
   }
   
   .hero-content {
@@ -532,27 +504,26 @@
   }
   
   .hero h1 {
-    font-size: 3.2rem;
+    font-size: 2.5rem;
   }
   
   .hero-subtitle {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
   
   .hero-description {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   
   .hero-buttons {
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
     gap: 16px;
   }
   
   .cta-button {
-    width: 100%;
-    max-width: 280px;
-    padding: 16px 24px;
+    flex: 1;
+    max-width: 200px;
+    padding: 14px 24px;
   }
   
   .services {
@@ -568,10 +539,6 @@
     gap: 24px;
   }
   
-  .service-card {
-    margin: 0 10px;
-  }
-  
   .testimonials {
     padding: 80px 20px;
   }
@@ -580,15 +547,15 @@
     grid-template-columns: 1fr;
     gap: 24px;
   }
-  
-  .testimonial-card {
-    margin: 0 10px;
-  }
 }
 
 @media (max-width: 480px) {
+  .hero-content {
+    gap: 30px;
+  }
+  
   .hero h1 {
-    font-size: 2.8rem;
+    font-size: 2.2rem;
   }
   
   .hero-subtitle {
@@ -596,11 +563,24 @@
   }
   
   .hero-description {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
   
   .hero-img {
+    max-width: 250px;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+  
+  .cta-button {
+    width: 100%;
     max-width: 280px;
+    padding: 16px 24px;
   }
   
   .section-header h2 {
@@ -609,43 +589,5 @@
   
   .section-header p {
     font-size: 1.1rem;
-  }
-  
-  .service-card,
-  .testimonial-card {
-    padding: 24px;
-  }
-  
-  .service-icon {
-    font-size: 3rem;
-    margin: 24px 24px 16px 24px;
-    height: 60px;
-  }
-  
-  .service-card h3 {
-    font-size: 1.4rem;
-    margin: 0 24px 12px 24px;
-  }
-  
-  .service-description {
-    margin: 0 24px 20px 24px;
-  }
-  
-  .service-features {
-    margin: 0 24px 24px 24px;
-  }
-  
-  .testimonial-avatar {
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem;
-  }
-  
-  .testimonial-info h4 {
-    font-size: 1.1rem;
-  }
-  
-  .testimonial-text {
-    font-size: 1rem;
   }
 }
